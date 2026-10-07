@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products | EcoBags UAE – Premium Eco-Friendly Bags in Dubai</title>
+    <meta name="description" content="Browse 60+ eco-friendly non-woven bags in Dubai – garment bags, hotel laundry bags, storage bags, drawstring utility bags and custom printed promotional bags.">
+    <script>document.documentElement.classList.add('js');</script>
+    <style>
+        :root {
+            --primary-green: #1E4D2B;
+            --secondary-green: #4CAF50;
+            --primary-brown: #8B5A2B;
+            --light-brown: #D2B48C;
+            --bg-light: #F9F9F9;
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        html { scroll-behavior: smooth; }
+        body { background-color: #FFFFFF; color: var(--text-dark); line-height: 1.6; }
+
+        h1, h2, h3, h4 { color: var(--primary-green);
+            font-family: Georgia, 'Times New Roman', Times, serif; }
+
+        a { text-decoration: none; transition: all 0.3s ease; }
+
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .btn {
+            display: inline-block; background-color: var(--primary-green);
+            color: var(--text-light) !important; padding: 12px 30px; border-radius: 4px;
+            font-weight: 600; border: none; cursor: pointer; text-align: center;
+        }
+        .btn:hover { background-color: var(--primary-brown); }
+
+        .btn-outline { background-color: transparent; border: 2px solid var(--primary-green);
+            color: var(--primary-green) !important; }
+        .btn-outline:hover { background-color: var(--primary-green); color: var(--text-light) !important; }
+
+        /* TOP BAR */
+        .top-bar { background-color: var(--primary-green); color: var(--text-light);
+            padding: 8px 0; font-size: 0.9rem; }
+        .top-bar-content { display: flex; justify-content: space-between; align-items: center; }
+        .top-bar-info span { margin-right: 20px; }
+
+        /* HEADER */
+        header { background-color: #FFFFFF; position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 10px -2px rgba(201, 174, 145, 0.5); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo img { height: 80px; }
+        nav ul { display: flex; list-style: none; gap: 25px; align-items: center; }
+        nav ul li a { color: var(--text-dark); font-weight: 600; font-size: 1rem; }
+        nav ul li a:hover { color: var(--primary-green); }
+
+        nav ul li a.nav-link { position: relative; padding-bottom: 4px; }
+        nav ul li a.nav-link::after {
+            content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 2px;
+            background-color: var(--primary-green); transition: width 0.3s ease;
+        }
+        nav ul li a.nav-link:hover::after { width: 100%; }
+        nav ul li a.nav-link.active { color: var(--primary-green); }
+        nav ul li a.nav-link.active::after { width: 100%; }
+
+        /* PAGE BANNER */
+        .page-banner {
+            background: linear-gradient(rgba(30, 77, 43, 0.9), rgba(30, 77, 43, 0.9)),
+                        url('hero-bg.jpg') center/cover no-repeat;
+            color: #fff; padding: 75px 0; text-align: center;
+        }
+        .page-banner h1 { color: #fff; font-size: 2.7rem; margin-bottom: 12px; }
+        .page-banner p { color: #dfe8df; max-width: 720px; margin: 0 auto; font-size: 1.08rem; }
+        .breadcrumb { margin-top: 20px; font-size: 0.95rem; color: #cfe0cf; }
+        .breadcrumb a { color: var(--light-brown); }
+        .breadcrumb a:hover { color: #fff; text-decoration: underline; }
+
+        /* CATALOGUE */
+        .catalogue { padding: 70px 0 80px; background-color: #FFFFFF; }
+
+        .catalogue-toolbar {
+            display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+            justify-content: space-between; margin-bottom: 40px;
+        }
+
+        .search-box { position: relative; flex: 1 1 280px; max-width: 380px; }
+        .search-box input {
+            width: 100%; padding: 12px 18px 12px 44px; border: 1px solid #d5d5d5;
+            border-radius: 50px; font-size: 0.98rem; font-family: inherit; color: #333;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .search-box input:focus {
+            outline: none; border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.12);
+        }
+        .search-box .search-icon {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            font-size: 1rem; opacity: 0.6; pointer-events: none;
+        }
+
+        .result-count { font-size: 0.95rem; color: #777; font-weight: 600; }
+
+        /* Product grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 28px;
+        }
+
+        .product-card {
+            background-color: #FFFFFF; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+            display: flex; flex-direction: column;
+            border: 1px solid #f0f0f0;
+            transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+        }
+
+        /* --- SCROLL REVEAL (slides up as you scroll) --- */
+        .js .product-card {
+            opacity: 0;
+            transform: translateY(45px);
+        }
+        .js .product-card.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .product-card.in-view:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 30px rgba(30, 77, 43, 0.16);
+            transition-duration: 0.3s;
+        }
+
+        .product-image {
+            position: relative; height: 230px; overflow: hidden;
+            background-color: #f4f4f4; cursor: zoom-in;
+        }
+        .product-image img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            transition: transform 0.45s ease;
+        }
+        .product-card:hover .product-image img { transform: scale(1.07); }
+
+        /* --- IN-VIEW SLIDESHOW --- */
+        .product-image .slide {
+            position: absolute; inset: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.45s ease;
+        }
+        .product-image .slide.active { opacity: 1; }
+
+        /* dots */
+        .slide-dots {
+            position: absolute; left: 0; right: 0; bottom: 10px;
+            display: flex; gap: 6px; justify-content: center; z-index: 3;
+            pointer-events: none;
+        }
+        .slide-dots i {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(255,255,255,0.55);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .slide-dots i.on { background: #fff; transform: scale(1.25); }
+
+        .product-info {
+            padding: 18px 18px 22px; text-align: center;
+            display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;
+        }
+        .product-info h3 {
+            font-size: 1.06rem; line-height: 1.4; margin-bottom: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 700; color: var(--primary-green);
+            min-height: 1.4em;
+        }
+
+        .card-actions { display: flex; gap: 8px; justify-content: center; }
+        .btn-sm {
+            padding: 9px 16px; font-size: 0.82rem; border-radius: 5px; flex: 1;
+            white-space: nowrap;
+        }
+        .btn-wa { background-color: #25D366; }
+        .btn-wa:hover { background-color: #128C7E; }
+
+        .empty-state {
+            display: none; text-align: center; padding: 60px 20px; color: #777;
+        }
+        .empty-state span { font-size: 3rem; display: block; margin-bottom: 14px; }
+        .empty-state h3 { margin-bottom: 8px; }
+
+        .catalogue-cta {
+            margin-top: 70px; text-align: center; background: var(--bg-light);
+            border: 1px solid #e9efe9; border-radius: 14px; padding: 50px 30px;
+        }
+        .catalogue-cta h2 { font-size: 1.9rem; margin-bottom: 12px; }
+        .catalogue-cta p { max-width: 640px; margin: 0 auto 26px; color: #555; }
+
+        /* FOOTER */
+        footer { background-color: #1a1a1a; color: #cccccc; padding: 60px 0 20px; }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap;
+            gap: 30px; margin-bottom: 40px; }
+        .footer-col { flex: 1; min-width: 250px; }
+        .footer-col h4 { color: var(--light-brown); margin-bottom: 20px; font-size: 1.2rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: #cccccc; }
+        .footer-col ul li a:hover { color: var(--secondary-green); padding-left: 5px; }
+        .footer-bottom { text-align: center; padding-top: 20px;
+            border-top: 1px solid #333; font-size: 0.9rem; }
+
+        /* WHATSAPP */
+        .whatsapp-btn {
+            position: fixed; bottom: 30px; right: 30px; background-color: #25D366;
+            color: white !important; border-radius: 50px; padding: 15px 25px;
+            font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 10px; z-index: 1000;
+        }
+        .whatsapp-btn:hover { background-color: #128C7E; transform: scale(1.05); }
+
+        .back-to-top {
+            position: fixed; bottom: 30px; left: 30px; width: 46px; height: 46px;
+            border-radius: 50%; background: var(--primary-green); color: #fff;
+            display: none; align-items: center; justify-content: center;
+            font-size: 1.2rem; z-index: 1000; border: none; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+        .back-to-top.show { display: flex; }
+        .back-to-top:hover { background: var(--primary-brown); }
+
+        /* LIGHTBOX */
+        .lightbox {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000; padding: 30px; flex-direction: column; gap: 18px;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 92vw; max-height: 78vh; border-radius: 10px;
+            border: 4px solid #fff; object-fit: contain; background: #fff;
+        }
+        .lightbox-caption { color: #fff; font-size: 1.05rem; text-align: center; font-weight: 600; }
+        .lightbox-close {
+            position: absolute; top: 22px; right: 30px; font-size: 2.2rem;
+            color: #fff; background: none; border: none; cursor: pointer; line-height: 1;
+        }
+        .lightbox-close:hover { color: var(--light-brown); }
+
+        /* Accessibility: respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .js .product-card { opacity: 1 !important; transform: none !important; }
+            .product-image .slide { transition: none; }
+            html { scroll-behavior: auto; }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar-content { flex-direction: column; gap: 10px; text-align: center; }
+            .header-content { flex-direction: column; gap: 15px; }
+            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .page-banner h1 { font-size: 2rem; }
+            .page-banner { padding: 55px 0; }
+            .whatsapp-btn { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 0.9rem; }
+            .back-to-top { bottom: 20px; left: 20px; width: 42px; height: 42px; }
+            .catalogue-toolbar { justify-content: center; text-align: center; }
+            .search-box { max-width: 100%; }
+            .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+            .product-image { height: 170px; }
+            .product-info { padding: 14px 12px 18px; }
+            .product-info h3 { font-size: 0.95rem; }
+            .card-actions { flex-direction: column; }
+            .btn-sm { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-info">
+                <span>📞 +971 52 708 7748</span>
+                <span>✉️ info@neomhotelsupplies.com</span>
+            </div>
+            <div class="top-bar-social">
+                <span>📍 Dubai, UAE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html"><img src="Images/ecobags-logo.png" alt="EcoBags UAE Logo"></a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html#home" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About Us</a></li>
+                    <li><a href="products.html" class="nav-link active">Products</a></li>
+                    <li><a href="index.html#gallery" class="nav-link">Gallery</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                    <li><a href="index.html#contact" class="btn" style="padding: 8px 20px;">Get a Quote</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- PAGE BANNER -->
+    <section class="page-banner">
+        <div class="container">
+            <h1>Our Complete Product Range</h1>
+            <p>Over 60 eco-friendly, reusable non-woven bags for hotels, retail stores, laundries and corporate gifting — all fully customizable with your brand logo.</p>
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> &nbsp;›&nbsp; <span>Products</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATALOGUE -->
+    <section class="catalogue">
+        <div class="container">
+
+            <div class="catalogue-toolbar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search products… e.g. garment bag">
+                </div>
+                <div class="result-count" id="resultCount">Loading…</div>
+            </div>
+
+            <div class="product-grid" id="productGrid"></div>
+
+            <div class="empty-state" id="emptyState">
+                <span>🔍</span>
+                <h3>No products found</h3>
+                <p>Try a different keyword.</p>
+            </div>
+
+            <div class="catalogue-cta">
+                <h2>Need Your Logo on These Bags?</h2>
+                <p>We specialize in custom printing for corporate gifts, hotels, retail brands and events across the UAE. Send us your artwork and quantity for a fast quotation.</p>
+                <a href="index.html#contact" class="btn">Get a Custom Quote</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h4>EcoBags UAE</h4>
+                <p>Your trusted partner for eco-friendly, reusable, and custom-printed bags in the United Arab Emirates.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html#home">Home</a></li>
+                    <li><a href="index.html#about">About Us</a></li>
+                    <li><a href="products.html">All Products</a></li>
+                    <li><a href="index.html#gallery">Gallery</a></li>
+                    <li><a href="index.html#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Details</h4>
+                <ul>
+                    <li>📍 Office No 101-463, 1st Floor, Mashreq Building, Al Suq al Kabeer, Dubai, UAE</li>
+                    <li>📞 <a href="tel:+971527087748">+971 52 708 7748</a></li>
+                    <li>✉️ <a href="mailto:info@neomhotelsupplies.com">info@neomhotelsupplies.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 EcoBags UAE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/971527087748" class="whatsapp-btn" target="_blank" rel="noopener">
+        <span>💬</span> Chat with Us
+    </a>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+        <img src="" alt="" id="lightboxImg">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <script>
+    /* ============================================================
+       PRODUCT DATA
+       ------------------------------------------------------------
+       Single image  :  { name: "Garment Bag", img: "path.jpg" }
+
+       SLIDESHOW     :  add an "imgs" array instead of / with "img":
+                        { name: "Garment Bag",
+                          imgs: ["Images/a.jpg",
+                                 "Images/b.jpg",
+                                 "Images/c.jpg"] }
+       The slideshow only starts playing while the card is on screen
+       (scroll-triggered) and pauses automatically when it scrolls out.
+       ============================================================ */
+    const PRODUCTS = [
+        { name: "", img: "Images/Productimg/09image1.jpg" },
+        { name: "", img: "Images/Productimg/09image2.jpg" },
+        { name: "", img: "Images/Productimg/09image3.jpg" },
+        { name: "", img: "Images/Productimg/09image4.jpg" },
+        { name: "", img: "Images/Productimg/09image5.jpg" },
+        { name: "", img: "Images/Productimg/09image6.jpg" },
+        { name: "", img: "Images/Productimg/09image7.jpg" },
+        { name: "", img: "Images/Productimg/09image8.jpg" },
+        { name: "", img: "Images/Productimg/09image9.jpg" },
+        { name: "", img: "Images/Productimg/09image10.jpg" },
+        { name: "", img: "Images/Productimg/09image11.jpg" },
+        { name: "", img: "Images/Productimg/09image12.jpg" },
+        { name: "", img: "Images/Productimg/09image13.jpg" },
+        { name: "", img: "Images/Productimg/09image14.jpg" },
+        { name: "", img: "Images/Productimg/09image15.jpg" },
+        { name: "", img: "Images/Productimg/09image16.jpg" },
+
+        { name: "", img: "Images/Productimg/09image17.jpg" },
+        { name: "", img: "Images/Productimg/09image18.jpg" },
+        { name: "", img: "Images/Productimg/09image19.jpg" },
+        { name: "", img: "Images/Productimg/09image20.jpg" },
+        { name: "", img: "Images/Productimg/09image21.jpg" },
+        { name: "", img: "Images/Productimg/09image22.jpg" },
+        { name: "", img: "Images/Productimg/09image23.jpg" },
+        { name: "", img: "Images/Productimg/09image25.jpg" },
+        { name: "", img: "Images/Productimg/09image26.jpg" },
+        { name: "", img: "Images/Productimg/09image27.jpg" },
+        { name: "", img: "Images/Productimg/09image28.jpg" },
+        { name: "", img: "Images/Productimg/09image29.jpg" },
+
+        { name: "", img: "Images/Productimg/09image30.jpg" },
+        { name: "", img: "Images/Productimg/09image31.jpg" },
+        { name: "", img: "Images/Productimg/09image32.jpg" },
+        { name: "", img: "Images/Productimg/09image33.jpg" },
+        { name: "", img: "Images/Productimg/09image34.jpg" },
+        { name: "", img: "Images/Productimg/09image35.jpg" },
+        { name: "", img: "Images/Productimg/09image36.jpg" },
+        { name: "", img: "Images/Productimg/09image37.jpg" },
+        { name: "", img: "Images/Productimg/09image38.jpg" },
+        { name: "", img: "Images/Productimg/09image39.jpg" },
+        { name: "", img: "Images/Productimg/09image40.jpg" },
+        { name: "", img: "Images/Productimg/09image41.jpg" },
+
+        { name: "", img: "Images/Productimg/09image42.jpg" },
+        { name: "", img: "Images/Productimg/09image43.jpg" },
+        { name: "", img: "Images/Productimg/09image44.jpg" },
+        { name: "", img: "Images/Productimg/09image45.jpg" },
+        { name: "", img: "Images/Productimg/09image46.jpg" },
+        { name: "", img: "Images/Productimg/09image47.jpg" },
+        { name: "", img: "Images/Productimg/09image48.jpg" },
+        { name: "", img: "" },
+        { name: "", img: "" },
+        { name: "", img: "" },
+        { name: "", img: "" },
+
+
+        { name: "", img: "" },
+        { name: "", img: "Images/Productimg/08image1.jpg" },
+        { name: "", img: "Images/Productimg/08image2.jpg" },
+        { name: "", img: "Images/Productimg/08image3.jpg" },
+        { name: "", img: "Images/Productimg/08image4.jpg" },
+        { name: "", img: "Images/Productimg/08image5.jpg" },
+        { name: "", img: "Images/Productimg/08image6.jpg" },
+        { name: "", img: "Images/Productimg/08image7.jpg" },
+        { name: "", img: "Images/Productimg/08image8.jpg" },
+        { name: "", img: "Images/Productimg/08image9.jpg" },
+        { name: "", img: "Images/Productimg/08image10.jpg" },
+        { name: "", img: "Images/Productimg/08image11.jpg" },
+        { name: "", img: "Images/Productimg/08image12.jpg" },
+        { name: "", img: "Images/Productimg/08image13.jpg" },
+        { name: "", img: "Images/Productimg/08image14.jpg" },
+        { name: "", img: "Images/Productimg/08image15.jpg" },
+        { name: "", img: "Images/Productimg/08image16.jpg" },
+        { name: "", img: "Images/Productimg/08image17jpg" },
+        { name: "", img: "Images/Productimg/08image18.jpg" },
+        { name: "", img: "Images/Productimg/08image19.jpg" },
+        { name: "", img: "Images/Productimg/08image20.jpg" },
+        { name: "", img: "Images/Productimg/08image21.jpg" },
+        { name: "", img: "Images/Productimg/08image22.jpg" },
+        { name: "", img: "Images/Productimg/08image23.jpg" },
+        { name: "", img: "Images/Productimg/08image24.jpg" },
+        { name: "", img: "Images/Productimg/08image25.jpg" },
+        { name: "", img: "Images/Productimg/08image26.jpg" },
+        { name: "", img: "Images/Productimg/08image27.jpg" },
+        { name: "", img: "" }
+
+
+    ];
+
+    /* 👇 OPTIONAL DEMO — uncomment to see the slideshow working.
+       It turns product #1 into a 3-image rotating slideshow.
+       (Copy this pattern onto any product you want.) */
+    // PRODUCTS[0].imgs = [
+    //     "Images/Productimg/09image1.jpg",
+    //     "Images/Productimg/09image2.jpg",
+    //     "Images/Productimg/09image3.jpg"
+    // ];
+
+    window.__FALLBACK = "data:image/svg+xml;utf8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">' +
+        '<rect width="100%" height="100%" fill="#eaf1ea"/>' +
+        '<text x="50%" y="47%" font-family="Arial" font-size="26" fill="#1E4D2B" text-anchor="middle">EcoBags UAE</text>' +
+        '<text x="50%" y="56%" font-family="Arial" font-size="16" fill="#7a8a7a" text-anchor="middle">Image coming soon</text>' +
+        '</svg>'
+    );
+
+    const grid        = document.getElementById('productGrid');
+    const searchInput = document.getElementById('searchInput');
+    const countEl     = document.getElementById('resultCount');
+    const emptyEl     = document.getElementById('emptyState');
+
+    let query = '';
+
+    function esc(str) {
+        return String(str).replace(/[&<>"']/g, s => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]
+        ));
+    }
+
+    /* ============================================================
+       SCROLL REVEAL  (cards slide up + fade in when scrolled into view)
+       ============================================================ */
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const revealObserver = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            const card  = entry.target;
+            const delay = Number(card.dataset.delay || 0);
+
+            card.style.transitionDelay = delay + 'ms';
+            card.classList.add('in-view');
+
+            /* remove the stagger delay afterwards so hover stays instant */
+            window.setTimeout(function () {
+                card.style.transitionDelay = '';
+            }, delay + 700);
+
+            obs.unobserve(card);
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    /* ============================================================
+       IN-VIEW SLIDESHOW  (plays only while the card is on screen)
+       ============================================================ */
+    const SLIDE_INTERVAL = 2600;          // ms between slides
+    const slideTimers = new Map();        // box -> interval id
+
+    const slideObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) startSlides(entry.target);
+            else stopSlides(entry.target);
+        });
+    }, { threshold: 0.3 });
+
+    function startSlides(box) {
+        const slides = box.querySelectorAll('.slide');
+        if (slides.length < 2 || slideTimers.has(box)) return;
+
+        let i = 0;
+        const dots = box.querySelectorAll('.slide-dots i');
+
+        const timer = window.setInterval(function () {
+            slides[i].classList.remove('active');
+            if (dots[i]) dots[i].classList.remove('on');
+
+            i = (i + 1) % slides.length;
+
+            slides[i].classList.add('active');
+            if (dots[i]) dots[i].classList.add('on');
+        }, SLIDE_INTERVAL);
+
+        slideTimers.set(box, timer);
+    }
+
+    function stopSlides(box) {
+        const timer = slideTimers.get(box);
+        if (timer) {
+            window.clearInterval(timer);
+            slideTimers.delete(box);
+        }
+    }
+
+    function clearAllSlides() {
+        slideTimers.forEach(function (timer) { window.clearInterval(timer); });
+        slideTimers.clear();
+    }
+
+    /* ============================================================
+       RENDER
+       ============================================================ */
+    function mediaHTML(p) {
+        const list = (p.imgs && p.imgs.length) ? p.imgs : [p.img];
+
+        /* Single image → normal card image */
+        if (list.length < 2) {
+            return `
+                <div class="product-image">
+                    <img src="${esc(list[0])}"
+                         alt="${esc(p.name)}"
+                         loading="lazy"
+                         onerror="this.onerror=null;this.src=window.__FALLBACK;">
+                </div>`;
+        }
+
+        /* Multiple images → slideshow */
+        const imgs = list.map(function (src, i) {
+            return `<img class="slide${i === 0 ? ' active' : ''}"
+                         src="${esc(src)}"
+                         alt="${esc(p.name)}"
+                         loading="lazy"
+                         onerror="this.onerror=null;this.src=window.__FALLBACK;">`;
+        }).join('');
+
+        const dots = list.map(function (_, i) {
+            return `<i class="${i === 0 ? 'on' : ''}"></i>`;
+        }).join('');
+
+        return `
+            <div class="product-image has-slideshow">
+                ${imgs}
+                <div class="slide-dots">${dots}</div>
+            </div>`;
+    }
+
+    function render() {
+        /* stop everything from the previous render */
+        clearAllSlides();
+        revealObserver.disconnect();
+        slideObserver.disconnect();
+
+        const q = query.trim().toLowerCase();
+
+        const list = PRODUCTS.filter(function (p) {
+            return (!q || (p.name || '').toLowerCase().includes(q));
+        });
+
+        grid.innerHTML = list.map(function (p) {
+            const waText = encodeURIComponent(
+                "Hello EcoBags UAE, I would like a quotation for: " + (p.name || "this product")
+            );
+            return `
+                <article class="product-card">
+                    ${mediaHTML(p)}
+                    <div class="product-info">
+                        <h3>${esc(p.name)}</h3>
+                        <div class="card-actions">
+                            <a class="btn btn-sm" href="index.html#contact">Get Quote</a>
+                            <a class="btn btn-sm btn-wa" target="_blank" rel="noopener"
+                               href="https://wa.me/971527087748?text=${waText}">WhatsApp</a>
+                        </div>
+                    </div>
+                </article>`;
+        }).join('');
+
+        countEl.textContent = list.length + (list.length === 1 ? ' product' : ' products');
+        emptyEl.style.display = list.length ? 'none' : 'block';
+
+        /* ---- hook up scroll animations ---- */
+        const cards = grid.querySelectorAll('.product-card');
+
+        cards.forEach(function (card, i) {
+            /* gentle stagger: 0 / 70 / 140 / 210 ms, repeating every row */
+            card.dataset.delay = (i % 4) * 70;
+
+            if (reduceMotion) {
+                card.classList.add('in-view');   // no animation, just show
+            } else {
+                revealObserver.observe(card);
+            }
+        });
+
+        grid.querySelectorAll('.product-image.has-slideshow').forEach(function (box) {
+            slideObserver.observe(box);
+        });
+    }
+
+    /* ============================================================
+       SEARCH
+       ============================================================ */
+    let searchTimer;
+    searchInput.addEventListener('input', function () {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () {
+            query = searchInput.value;
+            render();
+        }, 180);
+    });
+
+    /* ============================================================
+       LIGHTBOX
+       ============================================================ */
+    const lightbox        = document.getElementById('lightbox');
+    const lightboxImg     = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+
+    grid.addEventListener('click', function (e) {
+        const img = e.target.closest('.product-image img');
+        if (!img) return;
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightboxCaption.textContent = img.alt;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+
+    /* ============================================================
+       BACK TO TOP
+       ============================================================ */
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', function () {
+        backToTop.classList.toggle('show', window.scrollY > 500);
+    });
+    backToTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    /* ============================================================
+       GO
+       ============================================================ */
+    render();
+    </script>
+
+</body>
+</html>
