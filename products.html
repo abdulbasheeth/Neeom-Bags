@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Products | EcoBags UAE – Premium Eco-Friendly Bags in Dubai</title>
-    <meta name="description" content="Browse 60+ eco-friendly non-woven bags in Dubai – garment bags, hotel laundry bags, storage bags, drawstring utility bags and custom printed promotional bags.">
+    <meta name="description" content="Browse 100+ eco-friendly bags in Dubai – string bags, garment covers, jute &amp; juco bags, non-woven bags, cloth totes and custom printed promotional bags.">
     <script>document.documentElement.classList.add('js');</script>
     <style>
         :root {
@@ -52,6 +52,7 @@
             box-shadow: 0 4px 10px -2px rgba(201, 174, 145, 0.5); }
         .header-content { display: flex; justify-content: space-between; align-items: center; }
         .logo img { height: 80px; }
+        
         nav ul { display: flex; list-style: none; gap: 25px; align-items: center; }
         nav ul li a { color: var(--text-dark); font-weight: 600; font-size: 1rem; }
         nav ul li a:hover { color: var(--primary-green); }
@@ -65,10 +66,44 @@
         nav ul li a.nav-link.active { color: var(--primary-green); }
         nav ul li a.nav-link.active::after { width: 100%; }
 
+        /* HAMBURGER BUTTON & CLOSE BUTTON */
+        .menu-toggle {
+            display: none; background: none; border: none; cursor: pointer;
+            flex-direction: column; gap: 5px; padding: 10px;
+        }
+        .menu-toggle span {
+            display: block; width: 26px; height: 3px;
+            background-color: var(--primary-green); transition: all 0.3s ease;
+        }
+        
+        .menu-header {
+            display: none; /* Only visible on mobile */
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .menu-header img { height: 50px; }
+        
+        .close-menu {
+            background: none; border: 1px solid #ccc; font-size: 24px;
+            color: #555; cursor: pointer; width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 4px; line-height: 1;
+        }
+
+        /* OVERLAY BACKDROP */
+        .menu-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 1001; opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .menu-overlay.active { opacity: 1; visibility: visible; }
+
         /* PAGE BANNER */
         .page-banner {
-            background: linear-gradient(rgba(30, 77, 43, 0.9), rgba(30, 77, 43, 0.9)),
-                        url('hero-bg.jpg') center/cover no-repeat;
+            background: var(--primary-green);
             color: #fff; padding: 75px 0; text-align: center;
         }
         .page-banner h1 { color: #fff; font-size: 2.7rem; margin-bottom: 12px; }
@@ -78,11 +113,11 @@
         .breadcrumb a:hover { color: #fff; text-decoration: underline; }
 
         /* CATALOGUE */
-        .catalogue { padding: 70px 0 80px; background-color: #FFFFFF; }
+        .catalogue { padding: 55px 0 80px; background-color: #FFFFFF; scroll-margin-top: 100px; }
 
         .catalogue-toolbar {
             display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
-            justify-content: space-between; margin-bottom: 40px;
+            justify-content: space-between; margin-bottom: 22px;
         }
 
         .search-box { position: relative; flex: 1 1 280px; max-width: 380px; }
@@ -102,161 +137,175 @@
 
         .result-count { font-size: 0.95rem; color: #777; font-weight: 600; }
 
-        /* Product grid */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 28px;
+        /* Filter chips */
+        .filter-chips {
+            display: flex; flex-wrap: nowrap; gap: 10px; margin-bottom: 34px;
+            position: relative; overflow-x: auto; overflow-y: hidden;
+            -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
+            scroll-snap-type: x proximity; padding: 4px 2px 12px;
+            scrollbar-width: thin; scrollbar-color: #b9cfb9 transparent;
         }
+        .filter-chips::-webkit-scrollbar { height: 6px; }
+        .filter-chips::-webkit-scrollbar-track { background: #eef2ee; border-radius: 50px; }
+        .filter-chips::-webkit-scrollbar-thumb { background: #b9cfb9; border-radius: 50px; }
+        .filter-chips::-webkit-scrollbar-thumb:hover { background: var(--primary-green); }
+
+        .chip {
+            padding: 9px 20px; border-radius: 50px; cursor: pointer;
+            border: 1px solid #d9e2d9; background: #FFFFFF;
+            color: var(--primary-green); font-weight: 600; font-size: 0.9rem;
+            font-family: inherit; transition: all 0.25s ease;
+            flex: 0 0 auto; white-space: nowrap; scroll-snap-align: start;
+        }
+        .chip:hover { background: #eef5ee; border-color: #b9cfb9; }
+        .chip.active { background: var(--primary-green); border-color: var(--primary-green); color: #FFFFFF; }
+
+        /* Product grid */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px; }
 
         .product-card {
             background-color: #FFFFFF; border-radius: 10px; overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.06);
-            display: flex; flex-direction: column;
-            border: 1px solid #f0f0f0;
+            display: flex; flex-direction: column; border: 1px solid #f0f0f0;
             transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
         }
-
-        /* --- SCROLL REVEAL (slides up as you scroll) --- */
-        .js .product-card {
-            opacity: 0;
-            transform: translateY(45px);
-        }
-        .js .product-card.in-view {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .js .product-card { opacity: 0; transform: translateY(45px); }
+        .js .product-card.in-view { opacity: 1; transform: translateY(0); }
         .product-card.in-view:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 14px 30px rgba(30, 77, 43, 0.16);
+            transform: translateY(-6px); box-shadow: 0 14px 30px rgba(30, 77, 43, 0.16);
             transition-duration: 0.3s;
         }
 
-        .product-image {
-            position: relative; height: 230px; overflow: hidden;
-            background-color: #f4f4f4; cursor: zoom-in;
-        }
-        .product-image img {
-            width: 100%; height: 100%; object-fit: cover; display: block;
-            transition: transform 0.45s ease;
-        }
+        .product-image { position: relative; height: 230px; overflow: hidden; background-color: #f4f4f4; cursor: zoom-in; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.45s ease; }
         .product-card:hover .product-image img { transform: scale(1.07); }
 
-        /* --- IN-VIEW SLIDESHOW --- */
-        .product-image .slide {
-            position: absolute; inset: 0;
-            opacity: 0;
-            transition: opacity 0.8s ease, transform 0.45s ease;
-        }
+        .product-image .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease, transform 0.45s ease; }
         .product-image .slide.active { opacity: 1; }
 
-        /* dots */
-        .slide-dots {
-            position: absolute; left: 0; right: 0; bottom: 10px;
-            display: flex; gap: 6px; justify-content: center; z-index: 3;
-            pointer-events: none;
-        }
-        .slide-dots i {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: rgba(255,255,255,0.55);
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
+        .slide-dots { position: absolute; left: 0; right: 0; bottom: 10px; display: flex; gap: 6px; justify-content: center; z-index: 3; pointer-events: none; }
+        .slide-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.55); box-shadow: 0 0 0 1px rgba(0,0,0,0.15); transition: background 0.3s ease, transform 0.3s ease; }
         .slide-dots i.on { background: #fff; transform: scale(1.25); }
 
-        .product-info {
-            padding: 18px 18px 22px; text-align: center;
-            display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;
-        }
-        .product-info h3 {
-            font-size: 1.06rem; line-height: 1.4; margin-bottom: 16px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: 700; color: var(--primary-green);
-            min-height: 1.4em;
-        }
+        .product-info { padding: 18px 18px 22px; text-align: center; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .product-info h3 { font-size: 1.06rem; line-height: 1.4; margin-bottom: 16px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; color: var(--primary-green); min-height: 1.4em; }
 
         .card-actions { display: flex; gap: 8px; justify-content: center; }
-        .btn-sm {
-            padding: 9px 16px; font-size: 0.82rem; border-radius: 5px; flex: 1;
-            white-space: nowrap;
-        }
+        .btn-sm { padding: 9px 16px; font-size: 0.82rem; border-radius: 5px; flex: 1; white-space: nowrap; }
         .btn-wa { background-color: #25D366; }
         .btn-wa:hover { background-color: #128C7E; }
 
-        .empty-state {
-            display: none; text-align: center; padding: 60px 20px; color: #777;
-        }
+        .empty-state { display: none; text-align: center; padding: 60px 20px; color: #777; }
         .empty-state span { font-size: 3rem; display: block; margin-bottom: 14px; }
         .empty-state h3 { margin-bottom: 8px; }
 
-        .catalogue-cta {
-            margin-top: 70px; text-align: center; background: var(--bg-light);
-            border: 1px solid #e9efe9; border-radius: 14px; padding: 50px 30px;
-        }
+        .catalogue-cta { margin-top: 70px; text-align: center; background: var(--bg-light); border: 1px solid #e9efe9; border-radius: 14px; padding: 50px 30px; }
         .catalogue-cta h2 { font-size: 1.9rem; margin-bottom: 12px; }
         .catalogue-cta p { max-width: 640px; margin: 0 auto 26px; color: #555; }
 
         /* FOOTER */
         footer { background-color: #1a1a1a; color: #cccccc; padding: 60px 0 20px; }
-        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap;
-            gap: 30px; margin-bottom: 40px; }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 40px; }
         .footer-col { flex: 1; min-width: 250px; }
         .footer-col h4 { color: var(--light-brown); margin-bottom: 20px; font-size: 1.2rem; }
         .footer-col ul { list-style: none; }
         .footer-col ul li { margin-bottom: 10px; }
         .footer-col ul li a { color: #cccccc; }
         .footer-col ul li a:hover { color: var(--secondary-green); padding-left: 5px; }
-        .footer-bottom { text-align: center; padding-top: 20px;
-            border-top: 1px solid #333; font-size: 0.9rem; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #333; font-size: 0.9rem; }
 
         /* WHATSAPP */
-        .whatsapp-btn {
-            position: fixed; bottom: 30px; right: 30px; background-color: #25D366;
-            color: white !important; border-radius: 50px; padding: 15px 25px;
-            font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 10px; z-index: 1000;
-        }
+        .whatsapp-btn { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white !important; border-radius: 50px; padding: 15px 25px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; z-index: 1000; }
         .whatsapp-btn:hover { background-color: #128C7E; transform: scale(1.05); }
 
-        .back-to-top {
-            position: fixed; bottom: 30px; left: 30px; width: 46px; height: 46px;
-            border-radius: 50%; background: var(--primary-green); color: #fff;
-            display: none; align-items: center; justify-content: center;
-            font-size: 1.2rem; z-index: 1000; border: none; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        }
+        .back-to-top { position: fixed; bottom: 30px; left: 30px; width: 46px; height: 46px; border-radius: 50%; background: var(--primary-green); color: #fff; display: none; align-items: center; justify-content: center; font-size: 1.2rem; z-index: 1000; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
         .back-to-top.show { display: flex; }
         .back-to-top:hover { background: var(--primary-brown); }
 
         /* LIGHTBOX */
-        .lightbox {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            display: none; align-items: center; justify-content: center;
-            z-index: 2000; padding: 30px; flex-direction: column; gap: 18px;
-        }
+        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 30px; flex-direction: column; gap: 18px; }
         .lightbox.open { display: flex; }
-        .lightbox img {
-            max-width: 92vw; max-height: 78vh; border-radius: 10px;
-            border: 4px solid #fff; object-fit: contain; background: #fff;
-        }
+        .lightbox img { max-width: 92vw; max-height: 78vh; border-radius: 10px; border: 4px solid #fff; object-fit: contain; background: #fff; }
         .lightbox-caption { color: #fff; font-size: 1.05rem; text-align: center; font-weight: 600; }
-        .lightbox-close {
-            position: absolute; top: 22px; right: 30px; font-size: 2.2rem;
-            color: #fff; background: none; border: none; cursor: pointer; line-height: 1;
-        }
+        .lightbox-close { position: absolute; top: 22px; right: 30px; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; line-height: 1; }
         .lightbox-close:hover { color: var(--light-brown); }
 
-        /* Accessibility: respect reduced motion */
         @media (prefers-reduced-motion: reduce) {
             .js .product-card { opacity: 1 !important; transform: none !important; }
             .product-image .slide { transition: none; }
             html { scroll-behavior: auto; }
         }
 
+        /* =========================================
+           RESPONSIVE SIDEBAR MENU (OFF-CANVAS)
+           ========================================= */
         @media (max-width: 768px) {
-            .top-bar-content { flex-direction: column; gap: 10px; text-align: center; }
-            .header-content { flex-direction: column; gap: 15px; }
-            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            /* Hide Top Bar completely */
+            .top-bar { display: none; }
+            
+            /* Header setup */
+            .header-content { 
+                flex-direction: row; 
+                justify-content: space-between; 
+                align-items: center;
+                position: relative; 
+                padding: 10px 0;
+            }
+            .menu-toggle { display: flex; }
+
+            /* Sidebar / Drawer Navigation */
+            nav#mainNav {
+                position: fixed;
+                top: 0;
+                left: -100%; /* Hidden off-screen by default */
+                width: 80%;
+                max-width: 320px;
+                height: 100vh;
+                background-color: #FFFFFF;
+                box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+                z-index: 1002; /* Above overlay */
+                padding: 20px;
+                transition: left 0.3s ease;
+                display: block; 
+                overflow-y: auto;
+            }
+            
+            nav#mainNav.active { left: 0; }
+
+            /* Sidebar Header (Logo + Close button) */
+            .menu-header {
+                display: flex; /* Show on mobile */
+            }
+
+            /* Sidebar Links List */
+            nav ul { 
+                flex-direction: column; 
+                gap: 0; 
+                align-items: flex-start;
+                width: 100%;
+            }
+            nav ul li {
+                width: 100%;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            nav ul li a {
+                display: block;
+                padding: 15px 0;
+                width: 100%;
+                font-size: 1.05rem;
+            }
+            /* Adjust the Get a Quote button in sidebar */
+            nav ul li a.btn {
+                display: block;
+                width: 100%;
+                margin-top: 20px;
+                border-bottom: none;
+                padding: 12px 20px;
+            }
+            /* Remove hover underline effect for mobile links */
+            nav ul li a.nav-link::after { display: none; }
+
+            /* Page content adjustments */
             .page-banner h1 { font-size: 2rem; }
             .page-banner { padding: 55px 0; }
             .whatsapp-btn { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 0.9rem; }
@@ -269,6 +318,8 @@
             .product-info h3 { font-size: 0.95rem; }
             .card-actions { flex-direction: column; }
             .btn-sm { width: 100%; }
+            .filter-chips { justify-content: flex-start; margin-bottom: 26px; }
+            .chip { padding: 8px 16px; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -293,7 +344,22 @@
             <div class="logo">
                 <a href="index.html"><img src="Images/ecobags-logo.png" alt="EcoBags UAE Logo"></a>
             </div>
-            <nav>
+            
+            <!-- HAMBURGER BUTTON (Mobile Only) -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Open Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- SIDEBAR NAVIGATION -->
+            <nav id="mainNav">
+                <!-- Mobile Menu Header (Logo + X button) -->
+                <div class="menu-header">
+                    <img src="Images/ecobags-logo.png" alt="EcoBags Logo">
+                    <button class="close-menu" id="closeMenu" aria-label="Close Menu">&times;</button>
+                </div>
+
                 <ul>
                     <li><a href="index.html#home" class="nav-link">Home</a></li>
                     <li><a href="index.html#about" class="nav-link">About Us</a></li>
@@ -305,12 +371,15 @@
             </nav>
         </div>
     </header>
+    
+    <!-- OVERLAY BACKDROP FOR MENU -->
+    <div class="menu-overlay" id="menuOverlay"></div>
 
     <!-- PAGE BANNER -->
     <section class="page-banner">
         <div class="container">
             <h1>Our Complete Product Range</h1>
-            <p>Over 60 eco-friendly, reusable non-woven bags for hotels, retail stores, laundries and corporate gifting — all fully customizable with your brand logo.</p>
+            <p>Over 100 eco-friendly, reusable bags for hotels, retail stores, laundries and corporate gifting — string bags, garment covers, jute &amp; juco, non-woven and cotton totes, all fully customizable with your brand logo.</p>
             <div class="breadcrumb">
                 <a href="index.html">Home</a> &nbsp;›&nbsp; <span>Products</span>
             </div>
@@ -318,9 +387,8 @@
     </section>
 
     <!-- CATALOGUE -->
-    <section class="catalogue">
+    <section class="catalogue" id="catalogue">
         <div class="container">
-
             <div class="catalogue-toolbar">
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
@@ -329,6 +397,7 @@
                 <div class="result-count" id="resultCount">Loading…</div>
             </div>
 
+            <div class="filter-chips" id="filterChips"></div>
             <div class="product-grid" id="productGrid"></div>
 
             <div class="empty-state" id="emptyState">
@@ -342,7 +411,6 @@
                 <p>We specialize in custom printing for corporate gifts, hotels, retail brands and events across the UAE. Send us your artwork and quantity for a fast quotation.</p>
                 <a href="index.html#contact" class="btn">Get a Custom Quote</a>
             </div>
-
         </div>
     </section>
 
@@ -390,354 +458,794 @@
     </div>
 
     <script>
-    /* ============================================================
-       PRODUCT DATA
-       ------------------------------------------------------------
-       Single image  :  { name: "Garment Bag", img: "path.jpg" }
+/* ============================================================
+   SIDEBAR MOBILE MENU TOGGLE
+   ============================================================ */
+var menuToggle = document.getElementById('menuToggle');
+var closeMenu = document.getElementById('closeMenu');
+var mainNav = document.getElementById('mainNav');
+var menuOverlay = document.getElementById('menuOverlay');
 
-       SLIDESHOW     :  add an "imgs" array instead of / with "img":
-                        { name: "Garment Bag",
-                          imgs: ["Images/a.jpg",
-                                 "Images/b.jpg",
-                                 "Images/c.jpg"] }
-       The slideshow only starts playing while the card is on screen
-       (scroll-triggered) and pauses automatically when it scrolls out.
-       ============================================================ */
-    const PRODUCTS = [
-        { name: "", img: "Images/Productimg/09image1.jpg" },
-        { name: "", img: "Images/Productimg/09image2.jpg" },
-        { name: "", img: "Images/Productimg/09image3.jpg" },
-        { name: "", img: "Images/Productimg/09image4.jpg" },
-        { name: "", img: "Images/Productimg/09image5.jpg" },
-        { name: "", img: "Images/Productimg/09image6.jpg" },
-        { name: "", img: "Images/Productimg/09image7.jpg" },
-        { name: "", img: "Images/Productimg/09image8.jpg" },
-        { name: "", img: "Images/Productimg/09image9.jpg" },
-        { name: "", img: "Images/Productimg/09image10.jpg" },
-        { name: "", img: "Images/Productimg/09image11.jpg" },
-        { name: "", img: "Images/Productimg/09image12.jpg" },
-        { name: "", img: "Images/Productimg/09image13.jpg" },
-        { name: "", img: "Images/Productimg/09image14.jpg" },
-        { name: "", img: "Images/Productimg/09image15.jpg" },
-        { name: "", img: "Images/Productimg/09image16.jpg" },
+function openMenu() {
+    mainNav.classList.add('active');
+    menuOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
 
-        { name: "", img: "Images/Productimg/09image17.jpg" },
-        { name: "", img: "Images/Productimg/09image18.jpg" },
-        { name: "", img: "Images/Productimg/09image19.jpg" },
-        { name: "", img: "Images/Productimg/09image20.jpg" },
-        { name: "", img: "Images/Productimg/09image21.jpg" },
-        { name: "", img: "Images/Productimg/09image22.jpg" },
-        { name: "", img: "Images/Productimg/09image23.jpg" },
-        { name: "", img: "Images/Productimg/09image25.jpg" },
-        { name: "", img: "Images/Productimg/09image26.jpg" },
-        { name: "", img: "Images/Productimg/09image27.jpg" },
-        { name: "", img: "Images/Productimg/09image28.jpg" },
-        { name: "", img: "Images/Productimg/09image29.jpg" },
+function closeMenuFunc() {
+    mainNav.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+}
 
-        { name: "", img: "Images/Productimg/09image30.jpg" },
-        { name: "", img: "Images/Productimg/09image31.jpg" },
-        { name: "", img: "Images/Productimg/09image32.jpg" },
-        { name: "", img: "Images/Productimg/09image33.jpg" },
-        { name: "", img: "Images/Productimg/09image34.jpg" },
-        { name: "", img: "Images/Productimg/09image35.jpg" },
-        { name: "", img: "Images/Productimg/09image36.jpg" },
-        { name: "", img: "Images/Productimg/09image37.jpg" },
-        { name: "", img: "Images/Productimg/09image38.jpg" },
-        { name: "", img: "Images/Productimg/09image39.jpg" },
-        { name: "", img: "Images/Productimg/09image40.jpg" },
-        { name: "", img: "Images/Productimg/09image41.jpg" },
+if (menuToggle) menuToggle.addEventListener('click', openMenu);
+if (closeMenu) closeMenu.addEventListener('click', closeMenuFunc);
+if (menuOverlay) menuOverlay.addEventListener('click', closeMenuFunc);
 
-        { name: "", img: "Images/Productimg/09image42.jpg" },
-        { name: "", img: "Images/Productimg/09image43.jpg" },
-        { name: "", img: "Images/Productimg/09image44.jpg" },
-        { name: "", img: "Images/Productimg/09image45.jpg" },
-        { name: "", img: "Images/Productimg/09image46.jpg" },
-        { name: "", img: "Images/Productimg/09image47.jpg" },
-        { name: "", img: "Images/Productimg/09image48.jpg" },
-        { name: "", img: "" },
-        { name: "", img: "" },
-        { name: "", img: "" },
-        { name: "", img: "" },
+// Close menu when a navigation link is clicked
+mainNav.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+            closeMenuFunc();
+        }
+    });
+});
+
+/* ============================================================
+   1. CONFIG
+   ============================================================ */
+var IMG_ROOT = 'Images/';
+var DEBUG_URLS = true;
+
+var CATEGORIES = [
+    {
+        id: 'non-woven',
+        label: 'Non Woven Bags',
+        productLabel: 'Non Woven Bag',
+        files: [
+            'Images/1-Non Woven Bags/1Nw D Cut Bag.png',
+            'Images/1-Non Woven Bags/2 Nw D Cut Bag.png',
+            'Images/1-Non Woven Bags/3 Nw D Cut Bag.png',
+            'Images/1-Non Woven Bags/4 Nw Shopping Bag.png',
+            'Images/1-Non Woven Bags/5 Nw Shopping Bag.png',
+            'Images/1-Non Woven Bags/6 Nw Shopping Bag.png',
+            'Images/1-Non Woven Bags/7 Nw Shopping Bag.png',
+            'Images/1-Non Woven Bags/8 Nw Tote Bag.png',
+            'Images/1-Non Woven Bags/9 Nw Tote Bag.png',
+            'Images/1-Non Woven Bags/10 Nw Tote Bag.png',
+            'Images/1-Non Woven Bags/11 Nw Carry Bag.png',
+            'Images/1-Non Woven Bags/12 Nw Carry Bag.png',
+            'Images/1-Non Woven Bags/13 Nw Loop Handle Bag.png',
+            'Images/1-Non Woven Bags/14 Nw Loop Handle Bag.png',
+            'Images/1-Non Woven Bags/15 Nw Loop Handle Bag.png',
+            'Images/1-Non Woven Bags/16 Nw W Cut Bag.png',
+            'Images/1-Non Woven Bags/17 Nw W Cut Bag.png',
+            'Images/1-Non Woven Bags/18 Nw W Cut Bag.png',
+            'Images/1-Non Woven Bags/19 Nw Box Bag.png',
+            'Images/1-Non Woven Bags/20 Nw Box Bag.png',
+            'Images/1-Non Woven Bags/21 Nw Box Bag.png',
+            'Images/1-Non Woven Bags/22 Nw Laminated Bag.png',
+            'Images/1-Non Woven Bags/23 Nw Laminated Bag.png',
+            'Images/1-Non Woven Bags/24 Nw Laundry Bag.png',
+            'Images/1-Non Woven Bags/25 Nw Laundry Bag.png',
+            'Images/1-Non Woven Bags/26 Nw String Bag.png',
+            'Images/1-Non Woven Bags/27 Nw String Bag.png',
+        ],
+        titles: {
+            1: '1.Nw D Cut Bag',
+            2: '2.Nw D Cut Bag',
+            3: '3.Nw D Cut Bag',
+            4: '4.Nw Shopping Bag',
+            5: '5.Nw Shopping Bag',
+            6: '6.Nw Shopping Bag',
+            7: '7.Nw Shopping Bag',
+            8: '8.Nw Tote Bag',
+            9: '9.Nw Tote Bag',
+            10:'10.Nw Tote Bag',
+            11: '11.Nw Carry Bag',
+            12: '12.Nw Carry Bag',
+            13: '13.Nw Loop Handle Bag',
+            14: '14.Nw Loop Handle Bag',
+            15: '15.Nw Loop Handle Bag',
+            16: '16.Nw W Cut Bag',
+            17: '17.Nw W Cut Bag',
+            18: '18.Nw W Cut Bag',
+            19: '19.Nw Box Bag',
+            20: '20.w2 Box Bag',
+            21: '21.Nw Box Bag',
+            22: '22.Nw Laminated Bag',
+            23: '23.Nw Laminated Bag',
+            24: '24.Nw Laundry Bag',
+            25: '25.Nw Laundry Bag',
+            26: '26.Nw String Bag',
+            27: '27.Nw String Bag',
+        }
+    },
+    {
+        id: 'cloth-tote',
+        label: 'Cloth Tote Bags',
+        productLabel: 'Cloth Tote Bag',
+        files: [
+             'Images/2-Cloth Tote Bags/1_Nylon_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/2_Cloth_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/3_Cloth_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/4_Cloth_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/5_Cloth_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/6_Cloth_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/7_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/8_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/9_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/10_Nylon_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/11_Cloth_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/12_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/13_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/14_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/15_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/16_Cotton_Tote_Bag.png',
+             'Images/2-Cloth Tote Bags/17_Cotton_Yoga_Mat_Bag.png',
+             'Images/2-Cloth Tote Bags/18_Cotton_Two_Tone__Bag.png',
+             'Images/2-Cloth Tote Bags/19_Cotton_Two_Tone__Bag.png',
+             'Images/2-Cloth Tote Bags/20_Cotton_Two_Tone__Bag.png',
+             'Images/2-Cloth Tote Bags/21_Cotton_Two_Tone__Bag.png',
+    ], 
+    titles: {
+        1: '1.Nylon Tote Bag.png',
+        2: '2.Cloth Tote Bag.png',
+        3: '3.Cloth Tote Bag.png',
+        4: '4.Cloth Tote Bag.png',
+        5: '5.Cloth Tote Bag.png',
+        6: '6.Cloth Tote Bag.png',
+        7: '7.Cotton Tote Bag.png',
+        8: '8.Cotton Tote Bag.png',
+        9: '9.Cotton Tote Bag.png',
+        10:'10.Nylon Tote Bag.png',
+        11:'11.Cloth Tote Bag.png',
+        12:'12.Cotton Tote Bag.png',
+        13: '13.Cotton Tote Bag.png',
+        14: '14.Cotton Tote Bag.png',
+        15: '15.Cotton Tote Bag.png',
+        16: '16.Cotton Tote Bag.png',
+        17: '17.Cotton Yoga Mat Bag.png',
+        18: '18.Cotton Two Tone Bag.png',
+        19: '19.Cotton Two Tone Bag.png',
+        20: '20.Cotton_Two_Tone__Bag',
+        21: '21.Cotton_Two_Tone__Bag.png',
+    }
+    },
 
 
-        { name: "", img: "" },
-        { name: "", img: "Images/Productimg/08image1.jpg" },
-        { name: "", img: "Images/Productimg/08image2.jpg" },
-        { name: "", img: "Images/Productimg/08image3.jpg" },
-        { name: "", img: "Images/Productimg/08image4.jpg" },
-        { name: "", img: "Images/Productimg/08image5.jpg" },
-        { name: "", img: "Images/Productimg/08image6.jpg" },
-        { name: "", img: "Images/Productimg/08image7.jpg" },
-        { name: "", img: "Images/Productimg/08image8.jpg" },
-        { name: "", img: "Images/Productimg/08image9.jpg" },
-        { name: "", img: "Images/Productimg/08image10.jpg" },
-        { name: "", img: "Images/Productimg/08image11.jpg" },
-        { name: "", img: "Images/Productimg/08image12.jpg" },
-        { name: "", img: "Images/Productimg/08image13.jpg" },
-        { name: "", img: "Images/Productimg/08image14.jpg" },
-        { name: "", img: "Images/Productimg/08image15.jpg" },
-        { name: "", img: "Images/Productimg/08image16.jpg" },
-        { name: "", img: "Images/Productimg/08image17jpg" },
-        { name: "", img: "Images/Productimg/08image18.jpg" },
-        { name: "", img: "Images/Productimg/08image19.jpg" },
-        { name: "", img: "Images/Productimg/08image20.jpg" },
-        { name: "", img: "Images/Productimg/08image21.jpg" },
-        { name: "", img: "Images/Productimg/08image22.jpg" },
-        { name: "", img: "Images/Productimg/08image23.jpg" },
-        { name: "", img: "Images/Productimg/08image24.jpg" },
-        { name: "", img: "Images/Productimg/08image25.jpg" },
-        { name: "", img: "Images/Productimg/08image26.jpg" },
-        { name: "", img: "Images/Productimg/08image27.jpg" },
-        { name: "", img: "" }
+    {
+        id: 'cotton-canvas',
+        label: 'Cotton & Canvas Bags',
+        productLabel: 'Cotton & Canvas Bag',
+         files: [
+               'Images/3-Cotton & Canvas Bags/1.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/2.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/3.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/4.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/5.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/6.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/7.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/8.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/9.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/10.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/11.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/12.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/13.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/14.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/15.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/16.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/17.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/18.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/19.Cotton Carry Bag.png',
+               'Images/3-Cotton & Canvas Bags/20.Cotton Carry Bag.png',       
+    ],
+    titles: {
+        1: '1.Cotton Carry Bag',
+        2: '2.Cotton Carry Bag',
+        3: '3.Cotton Carry Bag',
+        4: '4.Cotton Carry Bag',
+        5: '5.Cotton Carry Bag',
+        6: '6.Cotton Carry Bag',
+        7: '7.Cotton Carry Bag',
+        8: '8.Cotton Carry Bag',
+        9: '9.Cotton Carry Bag',
+        10:'10.Cotton Carry Bag',
+        11:'11.Cotton Carry Bag',
+        12:'12.Cotton Carry Bag',
+        13: '13.Cotton Carry Bag',
+        14: '14.Cotton Carry Bag',
+        15: '15.Cotton Carry Bag',
+        16: '16.Cotton Carry Bag',
+        17: '17.Cotton Carry Bag',
+        18: '18.Cotton Carry Bag',
+        19: '19.Cotton Carry Bag',
+        20: '20.Cotton Carry Bag',
+      
+    
+    }
+    },
+    {
+        id: 'string-bags',
+        label: 'String Bags',
+        productLabel: 'String Bag',
+        files: [
+               'images/4-String Bags/1 Nw Laundry Bag.png',
+               'images/4-String Bags/2 Nw Laundry Bag.png',
+               'images/4-String Bags/3 Nw Laundry Bag.png',
+               'images/4-String Bags/4 Nw Laundry Bag.png',
+               'images/4-String Bags/5 Cloth Linen Collection Bag.png',
+               'images/4-String Bags/6 Nw String Bag.png',
+               'images/4-String Bags/7 Nw String Bag.png',
+               'images/4-String Bags/8 Nw String Bag.png',
+               'images/4-String Bags/9 Nw String Bag.png',
+               'images/4-String Bags/10 Nw String Bag.png',
+               'images/4-String Bags/11 Nw String Bag.png',
+               'images/4-String Bags/12 Nw String Bag.png',
+               'images/4-String Bags/13 Cotton String Bag.png',
+               'images/4-String Bags/14 Cotton String Pouch Bag.png',
+               'images/4-String Bags/15 Cotton String Bag.png',
+               'images/4-String Bags/16 Cotton Back Bag.png',
+               'images/4-String Bags/17 Cloth Linen Collection Bag.png',
+               'images/4-String Bags/18 Cotton String Pouch Bag.pngx',
+               'images/4-String Bags/19 Cotton Back Pack Bag.png',
+                'images/4-String Bags/20 Cotton String Bag.png.png',
+               'images/4-String Bags/21 Cotton Linen Collection Bag.png',
+               'images/4-String Bags/22 Cloth Back Pack Bag.png',
+               'images/4-String Bags/23 Cotton Linen Collection Bag.png',
+               'images/4-String Bags/24 Nw Slippers Bag.png',
+              
+               
+    ],
+        titles: {
+        1: '1.Nw Laundry Bag',
+        2: '2.Nw Laundry Bag',
+        3: '3.Nw Laundry Bag',
+        4: '4.Nw Laundry Bag',
+        5: '5.Cloth Linen Collection Bag',
+        6: '6.Nw String Bag',
+        7: '7.Nw String Bag',
+        8: '8.Nw String Bag',
+        9: '9.Nw String Bag',
+        10: '10.Nw String Bag',
+        11: '11.Nw String Bag',
+        12: '12.Nw String Bag',
+        13: '13.Cotton String Bag',
+        14: '14.Cotton String Pouch Bag',
+        15: '15.Cotton String Bag',
+        16: '16.Cotton Back Bag',
+        17: '17.Cloth Linen Collection Bag',
+        18: '18.Cotton String Pouch Bag',
+        19: '19.Cotton Back Pack Bag',
+        20: '20.Cotton String Bag',
+        21: '21.Cotton Linen Collection Bag',
+        22: '22.Cloth Back Pack Bag',
+        23: '23.Cotton Linen Collection Bag',
+        14: '24.Nw Slippers Bag',  
+    }
+    },
+   {
+        id: 'Garment-bags',
+        label: 'Garment Covers & Bags',
+        productLabel: 'Garment Covers & Bags',
+        files: [
+            'Images/5-Garment Covers & Bags/1 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/2 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/3 Nw Abaya & Kandura Bag.png',
+            'Images/5-Garment Covers & Bags/4 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/5 Nw Abaya & Kandura Bag.png',
+            'Images/5-Garment Covers & Bags/6 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/7 Nw Abaya & Kandura Bag.png',
+            'Images/5-Garment Covers & Bags/8 Nw Suit & Abaya Bag.png',
+            'Images/5-Garment Covers & Bags/9 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/10 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/11 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/12 Nw Abaya & Kandura Bag.png',
+            'Images/5-Garment Covers & Bags/13 Nw Suit & Abaya Bag.png',
+            'Images/5-Garment Covers & Bags/14 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/15 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/16 Nw Abaya & Kandura Bag.png',
+            'Images/5-Garment Covers & Bags/17 Nw Abaya & Kandura Bag.png',
+            'Images/5-Garment Covers & Bags/18 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/19 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/20 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/21 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/22 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/23 Nw Suit Bag.png',
+            'Images/5-Garment Covers & Bags/24 Nw Suit Bag.png',
+   ],
 
 
-    ];
 
-    /* 👇 OPTIONAL DEMO — uncomment to see the slideshow working.
-       It turns product #1 into a 3-image rotating slideshow.
-       (Copy this pattern onto any product you want.) */
-    // PRODUCTS[0].imgs = [
-    //     "Images/Productimg/09image1.jpg",
-    //     "Images/Productimg/09image2.jpg",
-    //     "Images/Productimg/09image3.jpg"
-    // ];
 
-    window.__FALLBACK = "data:image/svg+xml;utf8," + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">' +
-        '<rect width="100%" height="100%" fill="#eaf1ea"/>' +
-        '<text x="50%" y="47%" font-family="Arial" font-size="26" fill="#1E4D2B" text-anchor="middle">EcoBags UAE</text>' +
-        '<text x="50%" y="56%" font-family="Arial" font-size="16" fill="#7a8a7a" text-anchor="middle">Image coming soon</text>' +
-        '</svg>'
+            titles: {
+            1: '1.Nw Suit Bag',
+            2: '2.Nw Suit Bag',
+            3: '3.Nw Abaya & Kandura Bag',
+            4: '4.Nw Suit Bag',
+            5: '5.Nw Abaya & Kandura Bag',
+            6: '6.Nw Suit Bag',
+            7: '7.Nw Abaya & Kandura Bag',
+            8: '8.Nw Suit & Abaya Bag',
+            9: '9.Nw Suit Bag',
+            10: '10.Nw Suit Bag',
+            11: '11.Nw Suit Bag',
+            12: '12.Nw Abaya & Kandura Bag',
+            13: '13.Nw Suit & Abaya Bag',
+            14: '14.Nw Suit Bag',
+            15: '15.Nw Suit Bag',
+            16: '16.Nw Abaya & Kandura Bag',
+            17: '17.Nw Abaya & Kandura Bag',
+            18: '18.Nw Suit Bag',
+            19: '19.Nw Suit Bag',
+            20: '20.Nw Suit Bag',
+            21: '21.Nw Suit Bag',
+            22: '22.Nw Suit Bag',
+            23: '23.Nw Suit Bag',
+            24: '24.Nw Suit Bag',
+            }
+        },
+
+    {
+        id: 'jute-juco',
+        label: 'Jute & Juco Bags',
+        productLabel: 'Jute & Juco Bag',
+      files: [
+            'Images/6-Jute & Juco Bags/1 Natural Jute Tote Bag.png',
+            'Images/6-Jute & Juco Bags/2 Natural Jute Tote Bag.png',
+            'Images/6-Jute & Juco Bags/3 Natural Jute Tote Bag.png',
+            'Images/6-Jute & Juco Bags/4 Natural Jute & Juco Bag.png',
+            'Images/6-Jute & Juco Bags/5 Natural Jute & Juco Bag.png',
+            'Images/6-Jute & Juco Bags/6 Natural Jute & Canvas Bag.png',
+            'Images/6-Jute & Juco Bags/7 Natural Jute Bag With Button.png',
+            'Images/6-Jute & Juco Bags/8 Natural Jute Tote Bag.png',
+            'Images/6-Jute & Juco Bags/9 Natural Jute & Juco Bag.png',
+            'Images/6-Jute & Juco Bags/10 Natural Jute & Juco Bag with Button.png',
+            'Images/6-Jute & Juco Bags/11 Natural Jute & Juco Bag.png',
+            'Images/6-Jute & Juco Bags/12 Natural Jute Tote Bag.png',
+            'Images/6-Jute & Juco Bags/13 Natural Jute & Juco Bag.png',
+            'Images/6-Jute & Juco Bags/14 Juco White Color Bag.png',
+            'Images/6-Jute & Juco Bags/15 Juco Bag With Button.png',
+            'Images/6-Jute & Juco Bags/16 Natural Jute Carry Bag.png',
+            'Images/6-Jute & Juco Bags/17 Natural Jute & Juco Bag.png',
+            'Images/6-Jute & Juco Bags/18 Natural Jute Vertical Bag.png',
+            'Images/6-Jute & Juco Bags/19 Natural Jute Carry Bag.png',
+            'Images/6-Jute & Juco Bags/20 Natural Jute Canvas Bag.png',
+            'Images/6-Jute & Juco Bags/21 Natural Jute Canvas Bag.png',
+            'Images/6-Jute & Juco Bags/22 Juco Natural Color Bag.png',
+            'Images/6-Jute & Juco Bags/23 Natural Jute Carry Bag with Button.png',
+            'Images/6-Jute & Juco Bags/24 Natural Jute Carry Bag.png',
+            'Images/6-Jute & Juco Bags/25 Natural Jute Carry Bag.png',    
+    ],
+      titles: {
+            1: '1.Natural Jute Tote Bag',
+            2: '2.Natural Jute Tote Bag',
+            3: '3.Natural Jute Tote Bag',
+            4: '4.Natural Jute & Juco Bag',
+            5: '5.Natural Jute & Juco Bag',
+            6: '6.Natural Jute & Canvas Bag',
+            7: '7.Natural Jute Bag With Button',
+            8: '8.Natural Jute Tote Bag',
+            9: '9.Natural Jute & Juco Bag',
+            10: '10.Natural Jute & Juco Bag with Button',
+            11: '11.Natural Jute & Juco Bag',
+            12: '12.Natural Jute Tote Bag',
+            13: '13.Natural Jute & Juco Bag',
+            14: '14.Juco White Color Bag',
+            15: '15.Juco Bag With Button',
+            16: '16.Natural Jute Carry Bag',
+            17: '17.Natural Jute & Juco Bag',
+            18: '18.Natural Jute Vertical Bag',
+            19: '19.Natural Jute Carry Bag',
+            20: '20.Natural Jute Canvas Bag',
+            21: '21.Natural Jute Canvas Bag',
+            22: '22.Juco Natural Color Bag',
+            23: '23.Natural Jute Carry Bag with Button',
+            24: '24.Natural Jute Carry Bag',
+            25: '25.Natural Jute Carry Bag',
+      }
+    }
+];
+
+/* ============================================================
+   2. URL HELPERS
+   ============================================================ */
+function encodePath(p) {
+    return String(p).split('/').map(encodeURIComponent).join('/');
+}
+
+function esc(str) {
+    return String(str).replace(/[&<>"']/g, function (s) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s];
+    });
+}
+
+/* ============================================================
+   3. BUILD THE FLAT PRODUCT LIST
+   ============================================================ */
+function buildFiles(cat) {
+    var skip = cat.skip || [];
+    var pad  = cat.pad || 0;
+    var ext  = cat.ext || '.jpg';
+    var list = [];
+
+    for (var i = cat.from; i <= cat.to; i++) {
+        if (skip.indexOf(i) !== -1) continue;
+        var n = String(i);
+        if (pad > 0) n = n.padStart(pad, '0');
+        list.push({ num: i, file: cat.folder + (cat.prefix || '') + n + ext });
+    }
+    return list;
+}
+
+/* Look up a hand-written title; fall back to "Category 07" */
+function titleFor(cat, num, fallback) {
+    var t = cat.titles && cat.titles[num];
+    return (t && String(t).trim()) ? String(t).trim() : fallback;
+}
+
+var PRODUCTS = [];
+
+function buildProducts() {
+    PRODUCTS = [];
+
+    CATEGORIES.forEach(function (cat) {
+        var files, nums;
+
+        if (cat.files && cat.files.length) {
+            files = cat.files;
+            nums  = cat.nums || files.map(function (_, i) { return i + 1; });
+        } else {
+            var built = buildFiles(cat);
+            files = built.map(function (b) { return b.file; });
+            nums  = built.map(function (b) { return b.num; });
+        }
+
+        cat.files = files;
+        cat.nums  = nums;
+
+        files.forEach(function (file, i) {
+            var num   = nums[i];
+            var auto  = (cat.productLabel || cat.label) + ' ' + String(num).padStart(2, '0');
+            PRODUCTS.push({
+                cat:      cat.id,
+                catLabel: cat.label,
+                num:      num,
+                name:     titleFor(cat, num, auto),
+                img:      file
+            });
+        });
+    });
+}
+
+window.__FALLBACK = "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">' +
+    '<rect width="100%" height="100%" fill="#eaf1ea"/>' +
+    '<text x="50%" y="47%" font-family="Arial" font-size="26" fill="#1E4D2B" text-anchor="middle">EcoBags UAE</text>' +
+    '<text x="50%" y="56%" font-family="Arial" font-size="16" fill="#7a8a7a" text-anchor="middle">Image coming soon</text>' +
+    '</svg>'
+);
+
+/* ============================================================
+   4. DEBUG
+   ============================================================ */
+function debugUrls() {
+    if (!DEBUG_URLS) return;
+
+    CATEGORIES.forEach(function (cat) {
+        var f = cat.files || [];
+        console.log(
+            '%c' + cat.id + '  (' + f.length + ' images)',
+            'color:#1E4D2B;font-weight:700',
+            '\n  first → ' + encodePath(f[0] || '-') +
+            '\n  last  → ' + encodePath(f[f.length - 1] || '-')
+        );
+
+        if (!f.length) return;
+        var probe = new Image();
+        probe.onload  = function () { console.log('  ✅ loads OK'); };
+        probe.onerror = function () { console.warn('  ❌ 404 — check folder name / ext / pad'); };
+        probe.src = encodePath(f[0]);
+    });
+}
+
+/* ============================================================
+   5. DOM REFS
+   ============================================================ */
+var grid        = document.getElementById('productGrid');
+var searchInput = document.getElementById('searchInput');
+var countEl     = document.getElementById('resultCount');
+var emptyEl     = document.getElementById('emptyState');
+var chipsEl     = document.getElementById('filterChips');
+var catalogueEl = document.getElementById('catalogue');
+
+var query     = '';
+var activeCat = 'all';
+
+/* ============================================================
+   6. SCROLL REVEAL
+   ============================================================ */
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var hasIO = ('IntersectionObserver' in window);
+
+var revealObserver = hasIO ? new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var card  = entry.target;
+        var delay = Number(card.dataset.delay || 0);
+
+        card.style.transitionDelay = delay + 'ms';
+        card.classList.add('in-view');
+
+        window.setTimeout(function () { card.style.transitionDelay = ''; }, delay + 700);
+        obs.unobserve(card);
+    });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }) : null;
+
+/* ============================================================
+   7. IN-VIEW SLIDESHOW
+   ============================================================ */
+var SLIDE_INTERVAL = 2600;
+var slideTimers = new Map();
+
+var slideObserver = hasIO ? new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+        if (entry.isIntersecting) startSlides(entry.target);
+        else stopSlides(entry.target);
+    });
+}, { threshold: 0.3 }) : null;
+
+function startSlides(box) {
+    var slides = box.querySelectorAll('.slide');
+    if (slides.length < 2 || slideTimers.has(box)) return;
+
+    var i = 0;
+    var dots = box.querySelectorAll('.slide-dots i');
+
+    var timer = window.setInterval(function () {
+        slides[i].classList.remove('active');
+        if (dots[i]) dots[i].classList.remove('on');
+
+        i = (i + 1) % slides.length;
+
+        slides[i].classList.add('active');
+        if (dots[i]) dots[i].classList.add('on');
+    }, SLIDE_INTERVAL);
+
+    slideTimers.set(box, timer);
+}
+
+function stopSlides(box) {
+    var timer = slideTimers.get(box);
+    if (timer) { window.clearInterval(timer); slideTimers.delete(box); }
+}
+
+function clearAllSlides() {
+    slideTimers.forEach(function (t) { window.clearInterval(t); });
+    slideTimers.clear();
+}
+
+/* ============================================================
+   8. FILTER CHIPS
+   ============================================================ */
+function renderChips() {
+    var chips = [{ id: 'all', label: 'All Products' }].concat(
+        CATEGORIES.map(function (c) { return { id: c.id, label: c.label }; })
     );
 
-    const grid        = document.getElementById('productGrid');
-    const searchInput = document.getElementById('searchInput');
-    const countEl     = document.getElementById('resultCount');
-    const emptyEl     = document.getElementById('emptyState');
+    chipsEl.innerHTML = chips.map(function (c) {
+        return '<button type="button" class="chip' + (activeCat === c.id ? ' active' : '') + '"' +
+               ' data-cat="' + esc(c.id) + '">' + esc(c.label) + '</button>';
+    }).join('');
+}
 
-    let query = '';
+function syncActiveCategory() {
+    chipsEl.querySelectorAll('.chip').forEach(function (el) {
+        el.classList.toggle('active', el.dataset.cat === activeCat);
+    });
 
-    function esc(str) {
-        return String(str).replace(/[&<>"']/g, s => (
-            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]
-        ));
+    var active = chipsEl.querySelector('.chip.active');
+    if (!active) return;
+    if (chipsEl.scrollWidth <= chipsEl.clientWidth) return;
+
+    var left = active.offsetLeft - (chipsEl.clientWidth - active.offsetWidth) / 2;
+    chipsEl.scrollTo({ left: Math.max(0, left), behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+
+/* ============================================================
+   9. PRODUCT GRID
+   ============================================================ */
+var ONERROR = "this.onerror=null;this.dataset.fallback='1';this.src=window.__FALLBACK;";
+
+function mediaHTML(p) {
+    var list = (p.imgs && p.imgs.length) ? p.imgs : [p.img];
+    var nameAttr = ' alt="' + esc(p.name) + '" title="' + esc(p.name) + '"';
+
+    if (list.length < 2) {
+        return '<div class="product-image">' +
+                   '<img src="' + esc(encodePath(list[0])) + '"' + nameAttr +
+                        ' loading="lazy" decoding="async" onerror="' + ONERROR + '">' +
+               '</div>';
     }
 
-    /* ============================================================
-       SCROLL REVEAL  (cards slide up + fade in when scrolled into view)
-       ============================================================ */
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var imgs = list.map(function (src, i) {
+        return '<img class="slide' + (i === 0 ? ' active' : '') + '"' +
+               ' src="' + esc(encodePath(src)) + '"' + nameAttr +
+               ' loading="' + (i === 0 ? 'eager' : 'lazy') + '" decoding="async"' +
+               ' onerror="' + ONERROR + '">';
+    }).join('');
 
-    const revealObserver = new IntersectionObserver(function (entries, obs) {
-        entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            const card  = entry.target;
-            const delay = Number(card.dataset.delay || 0);
+    var dots = list.map(function (_, i) {
+        return '<i class="' + (i === 0 ? 'on' : '') + '"></i>';
+    }).join('');
 
-            card.style.transitionDelay = delay + 'ms';
-            card.classList.add('in-view');
+    return '<div class="product-image has-slideshow">' +
+               imgs +
+               '<div class="slide-dots">' + dots + '</div>' +
+           '</div>';
+}
 
-            /* remove the stagger delay afterwards so hover stays instant */
-            window.setTimeout(function () {
-                card.style.transitionDelay = '';
-            }, delay + 700);
+function render() {
+    clearAllSlides();
+    if (revealObserver) revealObserver.disconnect();
+    if (slideObserver)   slideObserver.disconnect();
 
-            obs.unobserve(card);
-        });
-    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+    var q = query.trim().toLowerCase();
 
-    /* ============================================================
-       IN-VIEW SLIDESHOW  (plays only while the card is on screen)
-       ============================================================ */
-    const SLIDE_INTERVAL = 2600;          // ms between slides
-    const slideTimers = new Map();        // box -> interval id
+    var list = PRODUCTS.filter(function (p) {
+        var matchCat = (activeCat === 'all' || p.cat === activeCat);
+        var matchQ   = (!q ||
+                        p.name.toLowerCase().indexOf(q) !== -1 ||
+                        p.catLabel.toLowerCase().indexOf(q) !== -1);
+        return matchCat && matchQ;
+    });
 
-    const slideObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) startSlides(entry.target);
-            else stopSlides(entry.target);
-        });
-    }, { threshold: 0.3 });
+    grid.innerHTML = list.map(function (p) {
+        var waText = encodeURIComponent(
+            "Hello EcoBags UAE, I would like a quotation for: " + p.name
+        );
+        return '<article class="product-card">' +
+                   mediaHTML(p) +
+                   '<div class="product-info">' +
+                       '<h3>' + esc(p.name) + '</h3>' +
+                       '<div class="card-actions">' +
+                           '<a class="btn btn-sm" href="index.html#contact">Get Quote</a>' +
+                           '<a class="btn btn-sm btn-wa" target="_blank" rel="noopener"' +
+                              ' href="https://wa.me/971527087748?text=' + waText + '">WhatsApp</a>' +
+                       '</div>' +
+                   '</div>' +
+               '</article>';
+    }).join('');
 
-    function startSlides(box) {
-        const slides = box.querySelectorAll('.slide');
-        if (slides.length < 2 || slideTimers.has(box)) return;
+    countEl.textContent = list.length + (list.length === 1 ? ' product' : ' products');
 
-        let i = 0;
-        const dots = box.querySelectorAll('.slide-dots i');
-
-        const timer = window.setInterval(function () {
-            slides[i].classList.remove('active');
-            if (dots[i]) dots[i].classList.remove('on');
-
-            i = (i + 1) % slides.length;
-
-            slides[i].classList.add('active');
-            if (dots[i]) dots[i].classList.add('on');
-        }, SLIDE_INTERVAL);
-
-        slideTimers.set(box, timer);
+    if (list.length) {
+        emptyEl.style.display = 'none';
+    } else {
+        emptyEl.style.display = 'block';
+        emptyEl.querySelector('h3').textContent = 'No products found';
+        emptyEl.querySelector('p').textContent = q
+            ? 'Try a different keyword.'
+            : 'No images have been added to this category yet.';
     }
 
-    function stopSlides(box) {
-        const timer = slideTimers.get(box);
-        if (timer) {
-            window.clearInterval(timer);
-            slideTimers.delete(box);
-        }
-    }
+    grid.querySelectorAll('.product-card').forEach(function (card, i) {
+        card.dataset.delay = (i % 4) * 70;
 
-    function clearAllSlides() {
-        slideTimers.forEach(function (timer) { window.clearInterval(timer); });
-        slideTimers.clear();
-    }
+        if (reduceMotion || !revealObserver) card.classList.add('in-view');
+        else revealObserver.observe(card);
+    });
 
-    /* ============================================================
-       RENDER
-       ============================================================ */
-    function mediaHTML(p) {
-        const list = (p.imgs && p.imgs.length) ? p.imgs : [p.img];
-
-        /* Single image → normal card image */
-        if (list.length < 2) {
-            return `
-                <div class="product-image">
-                    <img src="${esc(list[0])}"
-                         alt="${esc(p.name)}"
-                         loading="lazy"
-                         onerror="this.onerror=null;this.src=window.__FALLBACK;">
-                </div>`;
-        }
-
-        /* Multiple images → slideshow */
-        const imgs = list.map(function (src, i) {
-            return `<img class="slide${i === 0 ? ' active' : ''}"
-                         src="${esc(src)}"
-                         alt="${esc(p.name)}"
-                         loading="lazy"
-                         onerror="this.onerror=null;this.src=window.__FALLBACK;">`;
-        }).join('');
-
-        const dots = list.map(function (_, i) {
-            return `<i class="${i === 0 ? 'on' : ''}"></i>`;
-        }).join('');
-
-        return `
-            <div class="product-image has-slideshow">
-                ${imgs}
-                <div class="slide-dots">${dots}</div>
-            </div>`;
-    }
-
-    function render() {
-        /* stop everything from the previous render */
-        clearAllSlides();
-        revealObserver.disconnect();
-        slideObserver.disconnect();
-
-        const q = query.trim().toLowerCase();
-
-        const list = PRODUCTS.filter(function (p) {
-            return (!q || (p.name || '').toLowerCase().includes(q));
-        });
-
-        grid.innerHTML = list.map(function (p) {
-            const waText = encodeURIComponent(
-                "Hello EcoBags UAE, I would like a quotation for: " + (p.name || "this product")
-            );
-            return `
-                <article class="product-card">
-                    ${mediaHTML(p)}
-                    <div class="product-info">
-                        <h3>${esc(p.name)}</h3>
-                        <div class="card-actions">
-                            <a class="btn btn-sm" href="index.html#contact">Get Quote</a>
-                            <a class="btn btn-sm btn-wa" target="_blank" rel="noopener"
-                               href="https://wa.me/971527087748?text=${waText}">WhatsApp</a>
-                        </div>
-                    </div>
-                </article>`;
-        }).join('');
-
-        countEl.textContent = list.length + (list.length === 1 ? ' product' : ' products');
-        emptyEl.style.display = list.length ? 'none' : 'block';
-
-        /* ---- hook up scroll animations ---- */
-        const cards = grid.querySelectorAll('.product-card');
-
-        cards.forEach(function (card, i) {
-            /* gentle stagger: 0 / 70 / 140 / 210 ms, repeating every row */
-            card.dataset.delay = (i % 4) * 70;
-
-            if (reduceMotion) {
-                card.classList.add('in-view');   // no animation, just show
-            } else {
-                revealObserver.observe(card);
-            }
-        });
-
+    if (slideObserver) {
         grid.querySelectorAll('.product-image.has-slideshow').forEach(function (box) {
             slideObserver.observe(box);
         });
     }
 
-    /* ============================================================
-       SEARCH
-       ============================================================ */
-    let searchTimer;
-    searchInput.addEventListener('input', function () {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(function () {
-            query = searchInput.value;
-            render();
-        }, 180);
-    });
+    syncActiveCategory();
+}
 
-    /* ============================================================
-       LIGHTBOX
-       ============================================================ */
-    const lightbox        = document.getElementById('lightbox');
-    const lightboxImg     = document.getElementById('lightboxImg');
-    const lightboxCaption = document.getElementById('lightboxCaption');
-
-    grid.addEventListener('click', function (e) {
-        const img = e.target.closest('.product-image img');
-        if (!img) return;
-        lightboxImg.src = img.src;
-        lightboxImg.alt = img.alt;
-        lightboxCaption.textContent = img.alt;
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
-    });
-
-    function closeLightbox() {
-        lightbox.classList.remove('open');
-        document.body.style.overflow = '';
-    }
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function (e) {
-        if (e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeLightbox();
-    });
-
-    /* ============================================================
-       BACK TO TOP
-       ============================================================ */
-    const backToTop = document.getElementById('backToTop');
-    window.addEventListener('scroll', function () {
-        backToTop.classList.toggle('show', window.scrollY > 500);
-    });
-    backToTop.addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    /* ============================================================
-       GO
-       ============================================================ */
+/* ============================================================
+   10. CATEGORY SWITCHING / SEARCH
+   ============================================================ */
+function setCategory(id, scrollDown) {
+    activeCat = id;
+    renderChips();
     render();
-    </script>
+    if (scrollDown) {
+        catalogueEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+}
+
+chipsEl.addEventListener('click', function (e) {
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    setCategory(chip.dataset.cat, false);
+});
+
+var searchTimer;
+searchInput.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function () {
+        query = searchInput.value;
+        render();
+    }, 180);
+});
+
+/* ============================================================
+   11. LIGHTBOX
+   ============================================================ */
+var lightbox        = document.getElementById('lightbox');
+var lightboxImg     = document.getElementById('lightboxImg');
+var lightboxCaption = document.getElementById('lightboxCaption');
+
+grid.addEventListener('click', function (e) {
+    var img = e.target.closest('.product-image img');
+    if (!img) return;
+    if (img.dataset.fallback === '1') return;
+
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightboxCaption.textContent = img.alt;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+});
+
+function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+}
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+
+/* ============================================================
+   12. BACK TO TOP
+   ============================================================ */
+var backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', function () {
+    backToTop.classList.toggle('show', window.scrollY > 500);
+});
+backToTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ============================================================
+   13. OPTIONAL manifest.json OVERRIDE
+   ============================================================ */
+function loadManifest(cat) {
+    if (!cat.folder) return Promise.resolve(null);
+
+    return fetch(cat.folder + 'manifest.json', { cache: 'no-cache' })
+        .then(function (res) {
+            if (!res.ok) throw new Error('no manifest');
+            return res.json();
+        })
+        .then(function (data) {
+            var names = Array.isArray(data) ? data : (data.images || []);
+            if (!names.length) throw new Error('empty manifest');
+            return names.map(function (f) {
+                return /^https?:|^\//.test(f) ? f : cat.folder + f;
+            });
+        })
+        .catch(function () { return null; });
+}
+
+function go() {
+    Promise.all(CATEGORIES.map(function (cat) {
+        return loadManifest(cat).then(function (files) {
+            if (files) { cat.files = files; cat.nums = null; }
+        });
+    })).then(function () {
+        buildProducts();
+        debugUrls();
+        renderChips();
+        render();
+    });
+}
+
+go();
+</script>
 
 </body>
 </html>
