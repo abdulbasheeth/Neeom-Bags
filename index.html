@@ -51,7 +51,8 @@
             padding: 0 20px;
         }
 
-        section[id] { scroll-margin-top: 110px; }
+        /* header stack is ~140px tall */
+        section[id] { scroll-margin-top: 150px; }
 
         .btn {
             display: inline-block;
@@ -111,9 +112,23 @@
             }
         }
 
-        /* TOP BAR */
+        /* ============================================
+           FIXED HEADER STACK — SITS ON TOP OF THE HERO VIDEO
+           ============================================ */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: background-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        /* TOP BAR (glass strip over the video) */
         .top-bar {
-            background-color: var(--primary-green);
+            background-color: rgba(95, 127, 63, 0.92);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
             color: var(--text-light);
             padding: 8px 0;
             font-size: 0.9rem;
@@ -129,13 +144,29 @@
 
         /* HEADER */
         header {
-            background-color: #FFFFFF;
-            padding: 0px 0;
+            background-color: transparent;
+            padding: 0;
             border-bottom: none;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: relative;   /* anchor for the mobile dropdown */
+            box-shadow: none;
+            transition: background-color 0.35s ease;
+        }
+
+        /* Solid state once you scroll past the hero */
+        .site-header.is-scrolled {
+            background-color: #FFFFFF;
             box-shadow: 0 4px 10px -2px rgba(201, 174, 145, 0.5);
+        }
+
+        /* --- Transparent state: white nav text + original logo over the video --- */
+        .site-header:not(.is-scrolled) nav ul li a.nav-link { color: #FFFFFF; }
+        .site-header:not(.is-scrolled) nav ul li a.nav-link::after { background-color: #5F7F3F; } /* Changed to #5F7F3F */
+        /* Removed filter to keep the original logo colors */
+        .site-header:not(.is-scrolled) .nav-toggle { border-color: rgba(255, 255, 255, 0.55); }
+        .site-header:not(.is-scrolled) .nav-toggle .bar { background-color: #FFFFFF; }
+        .site-header:not(.is-scrolled) .nav-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: #FFFFFF;
         }
 
         .header-content {
@@ -177,15 +208,13 @@
             transition: width 0.3s ease;
         }
 
-        nav ul li a.nav-link:hover::after { width: 100%; }
+        nav ul li a.nav-link:hover::after { width: 100%;}
 
         nav ul li a.nav-link.active { color: var(--primary-green); }
 
         nav ul li a.nav-link.active::after { width: 100%; }
 
-        /* ============================================
-           NAV TOGGLE (HAMBURGER) — hidden on desktop
-           ============================================ */
+        /* NAV TOGGLE */
         .nav-toggle {
             display: none;
             flex-direction: column;
@@ -221,7 +250,6 @@
             transition: transform 0.3s ease, opacity 0.2s ease;
         }
 
-        /* Morph into an "X" when open */
         .nav-toggle[aria-expanded="true"] .bar:nth-child(1) {
             transform: translateY(7px) rotate(45deg);
         }
@@ -232,35 +260,96 @@
             transform: translateY(-7px) rotate(-45deg);
         }
 
-        /* HERO */
+        /* ============================================
+           HERO — FULL-SCREEN BACKGROUND VIDEO
+           ============================================ */
         .hero {
             position: relative;
-            background-color: var(--bg-light);
-            padding: 100px 0;
+            overflow: hidden;
+            height: 100vh;          /* fallback */
+            height: 100svh;         /* true visible viewport on mobile */
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('hero-bg.jpg');
+            background-color: #1c1c1c;
+            /* image fallback if the video cannot load */
+            background-image: url('Images/hero-bg.jpg');
             background-size: cover;
             background-position: center;
+            padding: 0;
+        }
+
+        .hero-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;       /* fills the screen, never stretched */
+            object-position: center;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Subtle dark scrim only (the old white wash is gone) */
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.55) 0%,
+                rgba(0, 0, 0, 0.20) 42%,
+                rgba(0, 0, 0, 0.55) 100%
+            );
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            padding: 150px 20px 70px;  /* clearance for the fixed navbar */
         }
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
+            color: #FFFFFF;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.55);
         }
 
         .hero p {
             font-size: 1.2rem;
             max-width: 700px;
             margin: 0 auto 30px;
-            color: var(--text-dark);
+            color: #FFFFFF;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
         }
 
-        /* NEW: Hero Button Group for 4px Gap */
         .hero-btn-group {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 4px;
+            gap: 12px;
+        }
+
+        .hero .btn-outline {
+            border-color: #FFFFFF;
+            color: #FFFFFF !important;
+        }
+
+        .hero .btn-outline:hover {
+            background-color: #FFFFFF;
+            color: var(--primary-green) !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero .container { padding: 130px 20px 50px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1.05rem; }
         }
 
         /* ABOUT */
@@ -654,7 +743,7 @@
 
         .contact-form .btn:active { transform: translateY(0); }
 
-        /* --- FORM STATUS MESSAGES --- */
+        /* FORM STATUS MESSAGES */
         .form-status {
             display: none;
             margin-top: 18px;
@@ -729,8 +818,12 @@
 
         .footer-col ul { list-style: none; }
 
-        .footer-col ul li { margin-bottom: 10px; }
-
+        .footer-col ul li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
         .footer-col ul li a { color: #cccccc; }
 
         .footer-col ul li a:hover {
@@ -745,33 +838,7 @@
             font-size: 0.9rem;
         }
 
-        /* WHATSAPP */
-        .whatsapp-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: #25D366;
-            color: white !important;
-            border-radius: 50px;
-            padding: 15px 25px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-        }
-
-        .whatsapp-btn:hover {
-            background-color: #128C7E;
-            transform: scale(1.05);
-        }
-
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
-
-        /* ---- MOBILE NAVIGATION (breakpoint: 900px) ---- */
+        /* RESPONSIVE */
         @media (max-width: 900px) {
 
             .header-content {
@@ -831,7 +898,11 @@
                 text-align: center;
             }
 
-            /* No-JS fallback: show the menu inline */
+            /* the mobile dropdown panel is white — keep its links dark */
+            .site-header:not(.is-scrolled) nav.is-open ul li a.nav-link {
+                color: var(--text-dark);
+            }
+
             html:not(.js-enabled) nav {
                 position: static;
                 max-height: none;
@@ -843,20 +914,11 @@
         }
 
         @media (max-width: 768px) {
-         .top-bar {
-        display: none;
-    }
-
-            .hero h1 { font-size: 2.2rem; }
+            .top-bar {
+                display: none;
+            }
 
             .about-layout { flex-direction: column; }
-
-            .whatsapp-btn {
-                bottom: 20px;
-                right: 20px;
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
 
             .view-more-wrap .btn {
                 width: 100%;
@@ -864,72 +926,384 @@
             }
         }
 
-        @media (max-width: 420px)
-         {
+        @media (max-width: 420px) {
             .logo img { height: 60px; }
             .nav-toggle { width: 42px; height: 42px; }
+        }
+
+        /* FLOATING WIDGETS GROUP */
+        .floating-widgets {
+            position: fixed;
+            right: 20px;
+            top: 75%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .widget-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .widget-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .call-btn { background-color: var(--primary-green); }
+        .whatsapp-btn-float { background-color: var(--secondary-green); }
+        .ai-btn { background-color: var(--primary-brown); }
+        .music-btn { background-color: var(--primary-green); }
+
+        /* --- AI CHAT BOX UI (Upgraded Lead Flow) --- */
+        .ai-chat-box {
+            position: fixed;
+            right: 85px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 350px;
+            max-height: calc(100vh - 40px);
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+            display: none;
+            flex-direction: column;
+            z-index: 10000;
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+        }
+        .ai-chat-box.active { display: flex; }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, #4a6631 100%);
+            color: white;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ai-chat-header-info { display: flex; align-items: center; gap: 10px; }
+        .ai-chat-header-icon {
+            background: rgba(255,255,255,0.2);
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            font-size: 1rem;
+        }
+        .ai-chat-header h4 { margin: 0; color: white; font-family: inherit; font-size: 1rem; line-height: 1.2; }
+        .ai-chat-header p { margin: 0; font-size: 0.72rem; color: rgba(255,255,255,0.85); }
+        .ai-chat-close {
+            background: none; border: none; color: white;
+            font-size: 1.6rem; cursor: pointer; line-height: 1;
+            padding: 4px 8px; border-radius: 6px;
+        }
+        .ai-chat-close:hover { background: rgba(255,255,255,0.15); }
+
+        .ai-chat-body {
+            padding: 15px;
+            flex: 1;
+            min-height: 240px;
+            max-height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f7faf3;
+        }
+
+        .ai-message {
+            background: #ffffff;
+            color: #333;
+            padding: 10px 14px;
+            border-radius: 14px;
+            border-top-left-radius: 3px;
+            align-self: flex-start;
+            max-width: 88%;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            border: 1px solid #e3ecd8;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            animation: aiFadeIn 0.25s ease;
+        }
+        .ai-message.question {
+            background: #FFF7E8;
+            border-left: 3px solid var(--secondary-green);
+            border-color: #e3ecd8;
+            border-left-color: var(--secondary-green);
+        }
+        .ai-message .ai-tag {
+            display: flex; align-items: center; gap: 4px;
+            margin-bottom: 4px;
+            font-size: 0.7rem; font-weight: 700;
+            color: var(--primary-green);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .user-message {
+            background: var(--primary-green);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 14px;
+            border-top-right-radius: 3px;
+            align-self: flex-end;
+            max-width: 88%;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            animation: aiFadeIn 0.25s ease;
+        }
+
+        @keyframes aiFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Choice buttons panel */
+        .ai-choices {
+            padding: 12px 14px;
+            border-top: 1px solid #eee;
+            background: white;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .ai-choice-btn {
+            padding: 8px 16px;
+            background: #f0f5e9;
+            color: var(--primary-green);
+            border: 1px solid #d5e3c2;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .ai-choice-btn:hover {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+            transform: translateY(-1px);
+        }
+
+        /* Typing indicator */
+        .ai-typing {
+            align-self: flex-start;
+            background: #ffffff;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border-top-left-radius: 3px;
+            border: 1px solid #e3ecd8;
+            display: flex;
+            gap: 4px;
+        }
+        .ai-typing span {
+            width: 7px; height: 7px;
+            background: var(--secondary-green);
+            border-radius: 50%;
+            animation: aiBounce 1.2s infinite;
+        }
+        .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes aiBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+
+        /* WhatsApp send button */
+        .ai-whatsapp-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px auto 4px;
+            padding: 11px 24px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .ai-whatsapp-btn:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.45);
+        }
+
+        /* Input area */
+        .ai-chat-footer {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            background: white;
+            gap: 8px;
+        }
+        .ai-chat-footer textarea {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #d5d5d5;
+            border-radius: 10px;
+            outline: none;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: none;
+            max-height: 80px;
+        }
+        .ai-chat-footer textarea:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(95,127,63,0.12);
+        }
+        .ai-chat-footer button {
+            padding: 10px 16px;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .ai-chat-footer button:hover:not(:disabled) { background: #4a6631; }
+        .ai-chat-footer button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .ai-chat-restart {
+            padding: 6px;
+            text-align: center;
+            font-size: 0.72rem;
+            color: #999;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+        }
+        .ai-chat-restart button {
+            background: none;
+            border: none;
+            color: var(--primary-green);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.72rem;
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsiveness for Widgets */
+        @media (max-width: 768px) {
+            .floating-widgets {
+                right: 15px;
+                gap: 10px;
+            }
+            .widget-btn {
+                width: 45px;
+                height: 45px;
+            }
+            .ai-chat-box {
+                right: 15px;
+                left: 15px;
+                top: auto;
+                bottom: 20px;
+                width: auto;
+                transform: none;
+                max-height: 80vh;
+            }
+            .ai-chat-body { max-height: 55vh; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <div class="container top-bar-content">
-            <div class="top-bar-info">
-                <span>📞 +971 52 708 7748</span>
-                <span>✉️ info@neomhotelsupplies.com</span>
-            </div>
-            <div class="top-bar-social">
-                <span>📍 Dubai, UAE</span>
+    <!-- ============================================
+         FIXED HEADER STACK (top bar + header)
+         Sits ON TOP of the full-screen hero video
+         ============================================ -->
+    <div class="site-header" id="siteHeader">
+
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="container top-bar-content">
+                <div class="top-bar-info">
+                    <span>📞 +971 52 708 7748</span>
+                    <span>✉️ info@neomhotelsupplies.com</span>
+                </div>
+                <div class="top-bar-social">
+                    <span>📍 Dubai, UAE</span>
+                </div>
             </div>
         </div>
+
+        <!-- HEADER -->
+        <header>
+            <div class="container header-content">
+                <div class="logo">
+                    <img src="Images/ecobags-logo.png" alt="EcoBags UAE Logo">
+                </div>
+
+                <button class="nav-toggle"
+                        id="navToggle"
+                        type="button"
+                        aria-label="Toggle navigation menu"
+                        aria-controls="primaryNav"
+                        aria-expanded="false">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+
+                <nav id="primaryNav">
+                    <ul>
+                        <li><a href="#home" class="nav-link">Home</a></li>
+                        <li><a href="#about" class="nav-link">About Us</a></li>
+                        <li><a href="products.html" class="nav-link">Products</a></li>
+                        <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                        <li><a href="#contact" class="nav-link">Contact</a></li>
+                        <li><a href="#contact" class="btn">Get a Quote</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
     </div>
+    <!-- /site-header -->
 
-    <!-- HEADER -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <img src="Images/ecobags-logo.png" alt="EcoBags UAE Logo">
-            </div>
-
-            <!-- HAMBURGER TOGGLE (mobile only) -->
-            <button class="nav-toggle"
-                    id="navToggle"
-                    type="button"
-                    aria-label="Toggle navigation menu"
-                    aria-controls="primaryNav"
-                    aria-expanded="false">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-
-            <nav id="primaryNav">
-                <ul>
-                    <li><a href="#home" class="nav-link">Home</a></li>
-                    <li><a href="#about" class="nav-link">About Us</a></li>
-                    <li><a href="products.html" class="nav-link">Products</a></li>
-                    <li><a href="#gallery" class="nav-link">Gallery</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                    <li><a href="#contact" class="btn">Get a Quote</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- HERO -->
+    <!-- HERO — full-screen background video (no white overlay) -->
     <section class="hero" id="home">
+        <video class="hero-video"
+               autoplay
+               muted
+               loop
+               playsinline
+               preload="auto"
+               poster="Images/hero-bg.jpg"
+               aria-hidden="true"
+               tabindex="-1">
+            <source src="Music/neeombags.mp4" type="video/mp4">
+        </video>
+
         <div class="container">
             <h1 class="reveal reveal-up">Premium Eco-Friendly Bags in UAE</h1>
             <p class="reveal reveal-up" style="transition-delay: 0.15s;">We supply high-quality, reusable non-woven bags for retail, hospitality, and corporate businesses. Customizable with your brand logo.</p>
-            
-            <!-- Applied hero-btn-group class for 4px gap -->
+
             <div class="reveal reveal-up hero-btn-group" style="transition-delay: 0.3s;">
                 <a href="products.html" class="btn">View Our Products</a>
                 <a href="#contact" class="btn btn-outline">Request a Quote</a>
             </div>
-            
         </div>
     </section>
 
@@ -1058,8 +1432,8 @@
                             <span class="icon" aria-hidden="true">📍</span>
                             <span>
                                 <strong>Address</strong>
-                                Office No 101-463, 1st Floor, Mashreq Building,<br>
-                                Al Suq al Kabeer, Dubai, UAE
+                                Office No 403, Al Noor Building, Al Qusais<br>
+                                Industrial Third, Dubai, UAE
                             </span>
                         </li>
                         <li>
@@ -1153,9 +1527,18 @@
             <div class="footer-col reveal reveal-up" style="transition-delay: 0.2s;">
                 <h4>Contact Details</h4>
                 <ul>
-                    <li>📍 Office No 101-463, 1st Floor, Mashreq Building, Al Suq al Kabeer, Dubai, UAE</li>
-                    <li>📞 <a href="tel:+971527087748">+971 52 708 7748</a></li>
-                    <li>✉️ <a href="mailto:info@neomhotelsupplies.com">info@neomhotelsupplies.com</a></li>
+                    <li>
+                        <span>📍</span>
+                        <span>Office No 403, Al Noor Building, Al Qusais<br>Industrial Third, Dubai, UAE</span>
+                    </li>
+                    <li>
+                        <span>📞</span>
+                        <a href="tel:+971527087748">+971 52 708 7748</a>
+                    </li>
+                    <li>
+                        <span>✉️</span>
+                        <a href="mailto:info@neomhotelsupplies.com">info@neomhotelsupplies.com</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -1164,10 +1547,66 @@
         </div>
     </footer>
 
-    <!-- FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/971527087748" class="whatsapp-btn" target="_blank" rel="noopener">
-        <span>💬</span> Chat with Us
-    </a>
+    <!-- FLOATING WIDGETS GROUP -->
+    <div class="floating-widgets">
+        <!-- Call Button -->
+        <a href="tel:+971527087748" class="widget-btn call-btn" title="Call Us">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </a>
+
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/971527087748" target="_blank" rel="noopener" class="widget-btn whatsapp-btn-float" title="WhatsApp Us">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        </a>
+
+        <!-- AI Chat Button -->
+        <button id="aiChatToggle" class="widget-btn ai-btn" title="AI Assistant">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        </button>
+
+        <!-- Music Button -->
+        <button id="musicToggle" class="widget-btn music-btn" title="Play/Pause Music">
+            <svg id="musicIconPlay" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <svg id="musicIconPause" style="display:none;" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Music/Pufino.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- AI Chat Box UI (Lead Flow) -->
+    <div id="aiChatBox" class="ai-chat-box">
+        <div class="ai-chat-header">
+            <div class="ai-chat-header-info">
+                <div class="ai-chat-header-icon">✨</div>
+                <div>
+                    <h4>Quote Assistant</h4>
+                    <p>We'll contact you shortly</p>
+                </div>
+            </div>
+            <button id="closeAiChat" class="ai-chat-close" aria-label="Close chat">&times;</button>
+        </div>
+
+        <div class="ai-chat-body" id="aiChatBody">
+            <div class="ai-message">
+                <div class="ai-tag">✨ AI Assistant</div>
+                👋 Hi! I'll help you get a quote. Let's start with a few details.
+            </div>
+        </div>
+
+        <div id="aiChoices" class="ai-choices" style="display:none;"></div>
+
+        <div class="ai-chat-footer" id="aiChatFooter">
+            <textarea id="aiInput" rows="1" placeholder="Type your answer..."></textarea>
+            <button id="aiSendBtn" aria-label="Send">➤</button>
+        </div>
+
+        <div class="ai-chat-restart">
+            <button id="aiRestart">Restart conversation</button>
+        </div>
+    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -1215,13 +1654,30 @@
             }
 
             /* ==========================================
+               1b) FIXED HEADER — SOLID AFTER THE HERO
+               ========================================== */
+            const siteHeader = document.getElementById("siteHeader");
+
+            function updateHeaderState() {
+                if (!siteHeader) return;
+                if (window.scrollY > 40) {
+                    siteHeader.classList.add("is-scrolled");
+                } else {
+                    siteHeader.classList.remove("is-scrolled");
+                }
+            }
+
+            updateHeaderState();
+            window.addEventListener("scroll", updateHeaderState, { passive: true });
+
+            /* ==========================================
                2) ACTIVE NAV HIGHLIGHT
                ========================================== */
             const navLinks = document.querySelectorAll("nav ul li a.nav-link");
             const sections = document.querySelectorAll("section[id]");
 
             function highlightOnScroll() {
-                const scrollPos = window.scrollY + 150;
+                const scrollPos = window.scrollY + 190;
                 let currentId = "";
 
                 sections.forEach(function (section) {
@@ -1261,62 +1717,61 @@
             const form = document.getElementById("quoteForm");
             const statusBox = document.getElementById("formStatus");
             const submitBtn = document.getElementById("quoteSubmitBtn");
-            const WHATSAPP_NUMBER = "971527087748"; // <-- change if your number changes
+            const WHATSAPP_NUMBER = "971527087748";
 
             function showStatus(message, type) {
                 statusBox.textContent = message;
                 statusBox.className = "form-status " + (type === "success" ? "is-success" : "is-error");
             }
 
-            form.addEventListener("submit", function (event) {
-                event.preventDefault();
+            if (form) {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
 
-                const data = new FormData(form);
-                const name = (data.get("name") || "").trim();
-                const email = (data.get("email") || "").trim();
-                const phone = (data.get("phone") || "").trim();
-                const message = (data.get("message") || "").trim();
+                    const data = new FormData(form);
+                    const name = (data.get("name") || "").trim();
+                    const email = (data.get("email") || "").trim();
+                    const phone = (data.get("phone") || "").trim();
+                    const message = (data.get("message") || "").trim();
 
-                // Basic validation
-                if (!name || !email || !phone || !message) {
-                    showStatus("Please fill in all fields before sending.", "error");
-                    return;
-                }
+                    if (!name || !email || !phone || !message) {
+                        showStatus("Please fill in all fields before sending.", "error");
+                        return;
+                    }
 
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailPattern.test(email)) {
-                    showStatus("Please enter a valid email address.", "error");
-                    return;
-                }
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(email)) {
+                        showStatus("Please enter a valid email address.", "error");
+                        return;
+                    }
 
-                // Build the WhatsApp message
-                const whatsappText =
-                    "*New Quote Request — EcoBags UAE*%0A%0A" +
-                    "*Name:* " + encodeURIComponent(name) + "%0A" +
-                    "*Email:* " + encodeURIComponent(email) + "%0A" +
-                    "*Phone:* " + encodeURIComponent(phone) + "%0A%0A" +
-                    "*Message:*%0A" + encodeURIComponent(message);
+                    const whatsappText =
+                        "*New Quote Request — EcoBags UAE*%0A%0A" +
+                        "*Name:* " + encodeURIComponent(name) + "%0A" +
+                        "*Email:* " + encodeURIComponent(email) + "%0A" +
+                        "*Phone:* " + encodeURIComponent(phone) + "%0A%0A" +
+                        "*Message:*%0A" + encodeURIComponent(message);
 
-                const whatsappUrl = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + whatsappText;
+                    const whatsappUrl = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + whatsappText;
 
-                // Disable button briefly while opening WhatsApp
-                submitBtn.disabled = true;
-                submitBtn.textContent = "Opening WhatsApp…";
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = "Opening WhatsApp…";
 
-                window.open(whatsappUrl, "_blank", "noopener");
+                    window.open(whatsappUrl, "_blank", "noopener");
 
-                showStatus(
-                    "Thank you, " + name + "! Your inquiry is ready in WhatsApp — just press Send there and we'll reply shortly.",
-                    "success"
-                );
+                    showStatus(
+                        "Thank you, " + name + "! Your inquiry is ready in WhatsApp — just press Send there and we'll reply shortly.",
+                        "success"
+                    );
 
-                form.reset();
+                    form.reset();
 
-                setTimeout(function () {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = "Send Inquiry";
-                }, 1500);
-            });
+                    setTimeout(function () {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = "Send Inquiry";
+                    }, 1500);
+                });
+            }
 
             /* ==========================================
                4) MOBILE NAV TOGGLE
@@ -1336,7 +1791,6 @@
 
             if (navToggle && primaryNav) {
 
-                // Toggle on button click
                 navToggle.addEventListener("click", function (e) {
                     e.stopPropagation();
                     if (primaryNav.classList.contains("is-open")) {
@@ -1346,19 +1800,16 @@
                     }
                 });
 
-                // Close after choosing a link
                 primaryNav.querySelectorAll("a").forEach(function (link) {
                     link.addEventListener("click", closeNav);
                 });
 
-                // Close when clicking outside the menu
                 document.addEventListener("click", function (e) {
                     if (!primaryNav.classList.contains("is-open")) return;
                     if (primaryNav.contains(e.target) || navToggle.contains(e.target)) return;
                     closeNav();
                 });
 
-                // Close on Escape
                 document.addEventListener("keydown", function (e) {
                     if (e.key === "Escape" && primaryNav.classList.contains("is-open")) {
                         closeNav();
@@ -1366,13 +1817,361 @@
                     }
                 });
 
-                // Reset state when returning to desktop width
                 let lastWidth = window.innerWidth;
                 window.addEventListener("resize", function () {
                     if (window.innerWidth > 900 && lastWidth <= 900) closeNav();
                     lastWidth = window.innerWidth;
                 });
             }
+
+            /* ==========================================
+               5) BACKGROUND MUSIC — AUTO-PLAY WITH HERO VIDEO
+               ========================================== */
+            const musicToggle    = document.getElementById('musicToggle');
+            const bgMusic        = document.getElementById('bgMusic');
+            const musicIconPlay  = document.getElementById('musicIconPlay');
+            const musicIconPause = document.getElementById('musicIconPause');
+
+            let userWantsMusic = true;   // user's intent (true = music should be playing)
+            let audioUnlocked  = false;  // flipped to true after one successful play()
+
+            function updateMusicIcon(playing) {
+                if (!musicIconPlay || !musicIconPause) return;
+                musicIconPlay.style.display  = playing ? 'none'  : 'block';
+                musicIconPause.style.display = playing ? 'block' : 'none';
+                if (musicToggle) musicToggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
+            }
+
+            function playBgMusic() {
+                if (!bgMusic || !userWantsMusic) return;
+                bgMusic.volume = 0.55;
+                const p = bgMusic.play();
+                if (p && typeof p.catch === 'function') {
+                    p.catch(() => { /* autoplay blocked — will retry on first gesture */ });
+                }
+            }
+
+            function pauseBgMusic() {
+                if (!bgMusic) return;
+                bgMusic.pause();
+            }
+
+            if (bgMusic) {
+                bgMusic.addEventListener('play',  () => updateMusicIcon(true));
+                bgMusic.addEventListener('pause', () => updateMusicIcon(false));
+                updateMusicIcon(!bgMusic.paused);
+            }
+
+            if (musicToggle && bgMusic) {
+                musicToggle.addEventListener('click', function () {
+                    if (bgMusic.paused) {
+                        userWantsMusic = true;
+                        playBgMusic();
+                    } else {
+                        userWantsMusic = false;
+                        pauseBgMusic();
+                    }
+                });
+            }
+
+            /* Browser autoplay policy: audio with sound needs one user gesture.
+               We listen for the very FIRST gesture (tap, click, key, or scroll) and
+               start the music immediately, so in practice it begins with the video. */
+            const GESTURE_EVENTS = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
+
+            function unlockAudioOnGesture() {
+                if (audioUnlocked || !userWantsMusic) return;
+                playBgMusic();
+                if (bgMusic && !bgMusic.paused) {
+                    audioUnlocked = true;
+                    GESTURE_EVENTS.forEach(function (evt) {
+                        document.removeEventListener(evt, unlockAudioOnGesture);
+                    });
+                }
+            }
+
+            GESTURE_EVENTS.forEach(function (evt) {
+                document.addEventListener(evt, unlockAudioOnGesture, { passive: true });
+            });
+
+            // Retry when the tab becomes visible again
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden && userWantsMusic) playBgMusic();
+            });
+
+            /* ==========================================
+               5b) HERO VIDEO — TRIGGER MUSIC ON PLAY
+               ========================================== */
+            const heroVideo = document.querySelector('.hero-video');
+
+            if (heroVideo) {
+                // Start music whenever the hero video starts playing
+                heroVideo.addEventListener('play', playBgMusic);
+
+                // Respect "reduce motion": pause the video (poster stays)
+                const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+                if (reduceMotion.matches) {
+                    heroVideo.removeAttribute('autoplay');
+                    heroVideo.pause();
+                }
+
+                // Some browsers block muted autoplay (iOS Low Power Mode, etc.)
+                const tryPlay = function () {
+                    const p = heroVideo.play();
+                    if (p && typeof p.catch === 'function') {
+                        p.catch(function () { /* poster / fallback image stays visible */ });
+                    }
+                };
+
+                heroVideo.addEventListener('canplay', tryPlay, { once: true });
+
+                // If the video errors out entirely, hide it so the CSS background-image
+                // fallback on .hero shows through.
+                heroVideo.addEventListener('error', function () {
+                    heroVideo.style.display = 'none';
+                }, true);
+            }
+
+            /* ==========================================
+               6) AI CHAT LOGIC (Lead Flow)
+               ========================================== */
+            const AI_QUESTIONS = [
+                {
+                    id: 'orderType',
+                    text: "🏢 Are you ordering as an individual or for a business?",
+                    type: 'choice',
+                    options: ['Individual', 'Business']
+                },
+                {
+                    id: 'productType',
+                    text: "📦 What type of bags are you looking for?",
+                    type: 'choice',
+                    options: ['Garment Bags', 'Laundry Bags', 'Tote Bags', 'Jute Bags', 'Custom Printed']
+                },
+                {
+                    id: 'quantity',
+                    text: "🔢 Approximately how many pieces do you need?",
+                    type: 'text',
+                    validate: (v) => v.trim().length > 0
+                },
+                {
+                    id: 'frequency',
+                    text: "🔄 Is this a one-time order or a recurring supply?",
+                    type: 'choice',
+                    options: ['One-time order', 'Recurring supply']
+                },
+                {
+                    id: 'mobile',
+                    text: "📱 What is your mobile number?",
+                    type: 'tel',
+                    validate: (v) => /^[0-9+\-\s()]{7,20}$/.test(v)
+                }
+            ];
+
+            const LEAD_WHATSAPP = '971527087748';
+
+            let chatStep = 0;
+            let chatAnswers = {};
+            let chatComplete = false;
+            let chatStarted = false;
+            let chatTyping = false;
+
+            const aiChatToggle = document.getElementById('aiChatToggle');
+            const aiChatBox    = document.getElementById('aiChatBox');
+            const aiChatBody   = document.getElementById('aiChatBody');
+            const aiChoices    = document.getElementById('aiChoices');
+            const aiChatFooter = document.getElementById('aiChatFooter');
+            const aiInput      = document.getElementById('aiInput');
+            const aiSendBtn    = document.getElementById('aiSendBtn');
+            const aiRestart    = document.getElementById('aiRestart');
+            const closeAiChat  = document.getElementById('closeAiChat');
+
+            function aiScroll() { aiChatBody.scrollTop = aiChatBody.scrollHeight; }
+
+            function aiAddUser(text) {
+                const el = document.createElement('div');
+                el.className = 'user-message';
+                el.textContent = text;
+                aiChatBody.appendChild(el);
+                aiScroll();
+            }
+
+            function aiAddBot(text, isQuestion) {
+                const el = document.createElement('div');
+                el.className = 'ai-message' + (isQuestion ? ' question' : '');
+                el.innerHTML = '<div class="ai-tag">✨ AI Assistant</div>' + text;
+                aiChatBody.appendChild(el);
+                aiScroll();
+            }
+
+            function aiShowTyping() {
+                chatTyping = true;
+                const el = document.createElement('div');
+                el.className = 'ai-typing';
+                el.id = 'aiTyping';
+                el.innerHTML = '<span></span><span></span><span></span>';
+                aiChatBody.appendChild(el);
+                aiScroll();
+            }
+
+            function aiHideTyping() {
+                chatTyping = false;
+                const el = document.getElementById('aiTyping');
+                if (el) el.remove();
+            }
+
+            function aiShowChoices(q) {
+                aiChoices.innerHTML = '';
+                if (q && q.type === 'choice') {
+                    q.options.forEach(function (opt) {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'ai-choice-btn';
+                        btn.textContent = opt;
+                        btn.addEventListener('click', function () { aiHandleChoice(opt); });
+                        aiChoices.appendChild(btn);
+                    });
+                    aiChoices.style.display = 'flex';
+                    aiChatFooter.style.display = 'none';
+                } else {
+                    aiChoices.style.display = 'none';
+                    aiChatFooter.style.display = 'flex';
+                    setTimeout(function () { aiInput.focus(); }, 100);
+                }
+            }
+
+            function aiAskCurrent() {
+                if (chatStep >= AI_QUESTIONS.length) { aiCompleteChat(); return; }
+                const q = AI_QUESTIONS[chatStep];
+                aiShowTyping();
+                setTimeout(function () {
+                    aiHideTyping();
+                    aiAddBot(q.text, true);
+                    aiShowChoices(q);
+                }, 600);
+            }
+
+            function aiHandleChoice(option) {
+                if (chatTyping || chatComplete) return;
+                const q = AI_QUESTIONS[chatStep];
+                if (!q || q.type !== 'choice') return;
+                aiAddUser(option);
+                chatAnswers[q.id] = option;
+                chatStep++;
+                aiChoices.style.display = 'none';
+                aiAskCurrent();
+            }
+
+            function aiHandleText() {
+                if (chatTyping || chatComplete) return;
+                const text = aiInput.value.trim();
+                if (!text) return;
+                const q = AI_QUESTIONS[chatStep];
+                if (!q) return;
+
+                if (q.validate && !q.validate(text)) {
+                    aiAddUser(text);
+                    aiInput.value = '';
+                    setTimeout(function () {
+                        aiAddBot('❌ Invalid input. ' + q.text, true);
+                    }, 400);
+                    return;
+                }
+
+                aiAddUser(text);
+                aiInput.value = '';
+                chatAnswers[q.id] = text;
+                chatStep++;
+                aiAskCurrent();
+            }
+
+            function aiCompleteChat() {
+                chatComplete = true;
+                aiShowTyping();
+                setTimeout(function () {
+                    aiHideTyping();
+                    aiAddBot('✅ Thank you! Please click the button below to send your details via WhatsApp.', false);
+
+                    const wrap = document.createElement('div');
+                    wrap.style.textAlign = 'center';
+                    wrap.innerHTML = '<button type="button" class="ai-whatsapp-btn" id="aiWhatsappBtn">💬 Send details via WhatsApp</button>';
+                    aiChatBody.appendChild(wrap);
+                    document.getElementById('aiWhatsappBtn').addEventListener('click', aiSendLeadWhatsApp);
+
+                    aiChoices.style.display = 'none';
+                    aiChatFooter.style.display = 'none';
+                    aiScroll();
+                }, 700);
+            }
+
+            function aiSendLeadWhatsApp() {
+                const labels = {
+                    orderType:   'Order type',
+                    productType: 'Product type',
+                    quantity:    'Quantity',
+                    frequency:   'Frequency',
+                    mobile:      'Mobile number'
+                };
+
+                let msg = 'New lead from EcoBags Quote Assistant\n\n';
+                for (const key in labels) {
+                    if (chatAnswers[key]) {
+                        msg += labels[key] + ': ' + chatAnswers[key] + '\n';
+                    }
+                }
+                msg += '\nPlease contact this lead. Thank you!';
+
+                const url = 'https://wa.me/' + LEAD_WHATSAPP + '?text=' + encodeURIComponent(msg);
+                window.open(url, '_blank');
+            }
+
+            function aiResetChat() {
+                chatStep = 0;
+                chatAnswers = {};
+                chatComplete = false;
+                chatStarted = false;
+                chatTyping = false;
+                aiChatBody.innerHTML =
+                    '<div class="ai-message"><div class="ai-tag">✨ AI Assistant</div>' +
+                    '👋 Hi! I\'ll help you get a quote. Let\'s start with a few details.</div>';
+                aiChoices.innerHTML = '';
+                aiChoices.style.display = 'none';
+                aiChatFooter.style.display = 'flex';
+                aiInput.value = '';
+                aiStartIfNeeded();
+            }
+
+            function aiStartIfNeeded() {
+                if (chatStarted || chatComplete) return;
+                chatStarted = true;
+                setTimeout(aiAskCurrent, 400);
+            }
+
+            if (aiChatToggle && aiChatBox) {
+                aiChatToggle.addEventListener('click', function () {
+                    const wasActive = aiChatBox.classList.contains('active');
+                    aiChatBox.classList.toggle('active');
+                    if (!wasActive) aiStartIfNeeded();
+                });
+            }
+
+            if (closeAiChat) {
+                closeAiChat.addEventListener('click', function () {
+                    aiChatBox.classList.remove('active');
+                });
+            }
+
+            if (aiSendBtn) aiSendBtn.addEventListener('click', aiHandleText);
+            if (aiInput) {
+                aiInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        aiHandleText();
+                    }
+                });
+            }
+
+            if (aiRestart) aiRestart.addEventListener('click', aiResetChat);
         });
     </script>
 
