@@ -280,6 +280,7 @@
             background-size: cover;
             background-position: center;
             padding: 0;
+            padding-bottom: 12vh; /* Pushes the centered text upwards */
         }
 
         .hero-video {
@@ -311,7 +312,7 @@
         .hero .container {
             position: relative;
             z-index: 2;
-            padding: 150px 20px 70px;  /* clearance for the fixed navbar */
+            padding: 130px 20px 30px;  /* Reduced padding to move text up */
         }
 
         .hero h1 {
@@ -347,7 +348,12 @@
         }
 
         @media (max-width: 768px) {
-            .hero .container { padding: 130px 20px 50px; }
+            .hero {
+                padding-bottom: 15vh; /* Shifts text further up on smaller screens */
+            }
+            .hero .container { 
+                padding: 100px 20px 20px; /* Reduced top clearance since top bar is hidden */
+            }
             .hero h1 { font-size: 2.2rem; }
             .hero p { font-size: 1.05rem; }
         }
@@ -1297,7 +1303,7 @@
         </video>
 
         <div class="container">
-            <h1 class="reveal reveal-up">Premium Eco-Friendly Bags in UAE</h1>
+            <h1 class="reveal reveal-up">Premium Eco-Friendly Bags That Carry Your Brand Forward</h1>
             <p class="reveal reveal-up" style="transition-delay: 0.15s;">We supply high-quality, reusable non-woven bags for retail, hospitality, and corporate businesses. Customizable with your brand logo.</p>
 
             <div class="reveal reveal-up hero-btn-group" style="transition-delay: 0.3s;">
@@ -1331,7 +1337,7 @@
 
                 <div class="product-card reveal reveal-up">
                     <div class="product-image">
-                        <img src="Images/ProductRangeimg/pro1.jpg" alt="Premium Garment Bags">
+                        <img src="Images/ProductRangeimg/Productimage1.jpg" alt="Premium Garment Bags">
                     </div>
                     <div class="product-info">
                         <h3>Premium Garment Bags</h3>
@@ -1340,7 +1346,7 @@
 
                 <div class="product-card reveal reveal-up" style="transition-delay: 0.1s;">
                     <div class="product-image">
-                        <img src="Images/ProductRangeimg/pro2.jpg" alt="Hotel Laundry Bags">
+                        <img src="Images/ProductRangeimg/Productimage2.jpg" alt="Hotel Laundry Bags">
                     </div>
                     <div class="product-info">
                         <h3>Hotel Laundry Bags</h3>
@@ -1349,7 +1355,7 @@
 
                 <div class="product-card reveal reveal-up" style="transition-delay: 0.2s;">
                     <div class="product-image">
-                        <img src="Images/ProductRangeimg/pro3.jpg" alt="Drawstring Utility Bags">
+                        <img src="Images/ProductRangeimg/Productimage3.jpg" alt="Drawstring Utility Bags">
                     </div>
                     <div class="product-info">
                         <h3>Drawstring Utility Bags</h3>
@@ -1358,7 +1364,7 @@
 
                 <div class="product-card reveal reveal-up" style="transition-delay: 0.3s;">
                     <div class="product-image">
-                        <img src="Images/ProductRangeimg/pro4.jpg" alt="Blanket &amp; Comforter Storage Bags">
+                        <img src="Images/ProductRangeimg/Productimage4.jpg" alt="Blanket &amp; Comforter Storage Bags">
                     </div>
                     <div class="product-info">
                         <h3>Blanket &amp; Comforter Storage Bags</h3>
@@ -1367,7 +1373,7 @@
 
                 <div class="product-card reveal reveal-up" style="transition-delay: 0.4s;">
                     <div class="product-image">
-                        <img src="Images/ProductRangeimg/pro5.jpg" alt="Custom Color Garment Bags">
+                        <img src="Images/ProductRangeimg/Productimage5.jpg" alt="Custom Color Garment Bags">
                     </div>
                     <div class="product-info">
                         <h3>Custom Color Garment Bags</h3>
@@ -1376,7 +1382,7 @@
 
                 <div class="product-card reveal reveal-up" style="transition-delay: 0.5s;">
                     <div class="product-image">
-                        <img src="Images/ProductRangeimg/pro6.jpg" alt="Travel Garment Bags">
+                        <img src="Images/ProductRangeimg/Productimage6.jpg" alt="Travel Garment Bags">
                     </div>
                     <div class="product-info">
                         <h3>Travel Garment Bags</h3>
@@ -1461,7 +1467,7 @@
 
                     <div class="map-container">
                         <iframe
-                            src="https://www.google.com/maps?q=Al%20Suq%20Al%20Kabeer%2C%20Dubai%2C%20UAE&output=embed"
+                            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3607.2195320910823!2d55.39338687538569!3d25.29682727764689!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjXCsDE3JzQ4LjYiTiA1NcKwMjMnNDUuNSJF!5e0!3m2!1sen!2sin!4v1793945442935!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
                             title="Neom Hotel Supplies location on Google Maps"
                             allowfullscreen=""
                             loading="lazy"
