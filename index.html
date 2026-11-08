@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -469,6 +470,14 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NEW: ensure anchor cards look like cards */
+        a.product-card {
+            color: inherit;
+            text-decoration: none;
             display: flex;
             flex-direction: column;
         }
@@ -1335,59 +1344,65 @@
             <h2 class="section-title reveal reveal-up">Our Product Range</h2>
             <div class="product-grid">
 
-                <div class="product-card reveal reveal-up">
+                <!-- UPDATED: Now a link to products.html?cat=non-woven -->
+                <a class="product-card reveal reveal-up" href="products.html?cat=non-woven">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage1.jpg" alt="Premium Garment Bags">
                     </div>
                     <div class="product-info">
                         <h3>Non Woven Bags</h3>
                     </div>
-                </div>
+                </a>
 
-                <div class="product-card reveal reveal-up" style="transition-delay: 0.1s;">
+                <!-- UPDATED: Now a link to products.html?cat=cloth-tote -->
+                <a class="product-card reveal reveal-up" href="products.html?cat=cloth-tote" style="transition-delay: 0.1s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage2.jpg" alt="Hotel Laundry Bags">
                     </div>
                     <div class="product-info">
                         <h3>Cloth Tote Bags</h3>
                     </div>
-                </div>
+                </a>
 
-                <div class="product-card reveal reveal-up" style="transition-delay: 0.2s;">
+                <!-- UPDATED: Now a link to products.html?cat=cotton-canvas -->
+                <a class="product-card reveal reveal-up" href="products.html?cat=cotton-canvas" style="transition-delay: 0.2s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage3.jpg" alt="Drawstring Utility Bags">
                     </div>
                     <div class="product-info">
                         <h3>Cotton & Canvas Bags</h3>
                     </div>
-                </div>
+                </a>
 
-                <div class="product-card reveal reveal-up" style="transition-delay: 0.3s;">
+                <!-- UPDATED: Now a link to products.html?cat=string-bags -->
+                <a class="product-card reveal reveal-up" href="products.html?cat=string-bags" style="transition-delay: 0.3s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage4.jpg" alt="Blanket &amp; Comforter Storage Bags">
                     </div>
                     <div class="product-info">
                         <h3>String Bags</h3>
                     </div>
-                </div>
+                </a>
 
-                <div class="product-card reveal reveal-up" style="transition-delay: 0.4s;">
+                <!-- UPDATED: Now a link to products.html?cat=Garment-bags (note capital G) -->
+                <a class="product-card reveal reveal-up" href="products.html?cat=Garment-bags" style="transition-delay: 0.4s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage5.jpg" alt="Custom Color Garment Bags">
                     </div>
                     <div class="product-info">
                         <h3>Garment Covers & Bags</h3>
                     </div>
-                </div>
+                </a>
 
-                <div class="product-card reveal reveal-up" style="transition-delay: 0.5s;">
+                <!-- UPDATED: Now a link to products.html?cat=jute-juco -->
+                <a class="product-card reveal reveal-up" href="products.html?cat=jute-juco" style="transition-delay: 0.5s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage6.jpg" alt="Travel Garment Bags">
                     </div>
                     <div class="product-info">
                         <h3>Jute & Juco Bags</h3>
                     </div>
-                </div>
+                </a>
 
             </div>
 

@@ -1,3 +1,4 @@
+<!-- products.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1843,6 +1844,9 @@ if (aiInput) {
 
 if (aiRestart) aiRestart.addEventListener('click', aiResetChat);
 
+/* ============================================================
+   UPDATED: go() now reads ?cat= from URL
+   ============================================================ */
 function go() {
     Promise.all(CATEGORIES.map(function (cat) {
         return loadManifest(cat).then(function (files) {
@@ -1850,9 +1854,28 @@ function go() {
         });
     })).then(function () {
         buildProducts();
+
+        // ---- NEW: read ?cat=... from the URL ----
+        var params = new URLSearchParams(window.location.search);
+        var catParam = params.get('cat');
+        var matched = false;
+        if (catParam) {
+            var match = CATEGORIES.find(function (c) { return c.id === catParam; });
+            if (match) {
+                activeCat = catParam;
+                matched = true;
+            }
+        }
+        // ----------------------------------------
+
         debugUrls();
         renderChips();
         render();
+
+        // Scroll to catalogue if a category was requested
+        if (matched) {
+            catalogueEl.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
     });
 }
 
