@@ -52,7 +52,7 @@
             padding: 0 20px;
         }
 
-        /* header stack is ~140px tall */
+        /* header stack is ~140px tall on desktop, smaller on mobile */
         section[id] { scroll-margin-top: 150px; }
 
         .btn {
@@ -114,7 +114,7 @@
         }
 
         /* ============================================
-           FIXED HEADER STACK — SITS ON TOP OF THE HERO VIDEO
+           FIXED HEADER STACK
            ============================================ */
         .site-header {
             position: fixed;
@@ -148,7 +148,7 @@
             background-color: transparent;
             padding: 0;
             border-bottom: none;
-            position: relative;   /* anchor for the mobile dropdown */
+            position: relative;   
             box-shadow: none;
             transition: background-color 0.35s ease;
         }
@@ -159,10 +159,9 @@
             box-shadow: 0 4px 10px -2px rgba(201, 174, 145, 0.5);
         }
 
-        /* --- Transparent state: white nav text + original logo over the video --- */
+        /* --- Transparent state: white nav text --- */
         .site-header:not(.is-scrolled) nav ul li a.nav-link { color: #FFFFFF; }
-        .site-header:not(.is-scrolled) nav ul li a.nav-link::after { background-color: #5F7F3F; } /* Changed to #5F7F3F */
-        /* Removed filter to keep the original logo colors */
+        .site-header:not(.is-scrolled) nav ul li a.nav-link::after { background-color: #5F7F3F; }
         .site-header:not(.is-scrolled) .nav-toggle { border-color: rgba(255, 255, 255, 0.55); }
         .site-header:not(.is-scrolled) .nav-toggle .bar { background-color: #FFFFFF; }
         .site-header:not(.is-scrolled) .nav-toggle:hover {
@@ -176,7 +175,10 @@
             align-items: center;
         }
 
-        .logo img { height: 100px; }
+        .logo img { 
+            height: 100px; 
+            transition: height 0.3s ease;
+        }
 
         nav ul {
             display: flex;
@@ -210,9 +212,7 @@
         }
 
         nav ul li a.nav-link:hover::after { width: 100%;}
-
         nav ul li a.nav-link.active { color: var(--primary-green); }
-
         nav ul li a.nav-link.active::after { width: 100%; }
 
         /* NAV TOGGLE */
@@ -251,37 +251,28 @@
             transition: transform 0.3s ease, opacity 0.2s ease;
         }
 
-        .nav-toggle[aria-expanded="true"] .bar:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-        .nav-toggle[aria-expanded="true"] .bar:nth-child(2) {
-            opacity: 0;
-        }
-        .nav-toggle[aria-expanded="true"] .bar:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
+        .nav-toggle[aria-expanded="true"] .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-toggle[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
+        .nav-toggle[aria-expanded="true"] .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         /* ============================================
-           HERO — FULL-SCREEN BACKGROUND VIDEO
+           HERO
            ============================================ */
         .hero {
             position: relative;
             overflow: hidden;
-            height: 100vh;          /* fallback */
-            height: 100svh;         /* true visible viewport on mobile */
-            min-height: 100vh;
-            min-height: 100svh;
+            height: 100vh;
+            height: 100svh;
+            min-height: 600px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             background-color: #1c1c1c;
-            /* image fallback if the video cannot load */
             background-image: url('Images/hero-bg.jpg');
             background-size: cover;
             background-position: center;
             padding: 0;
-            padding-bottom: 12vh; /* Pushes the centered text upwards */
         }
 
         .hero-video {
@@ -289,13 +280,12 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;       /* fills the screen, never stretched */
+            object-fit: cover;
             object-position: center;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* Subtle dark scrim only (the old white wash is gone) */
         .hero::after {
             content: "";
             position: absolute;
@@ -305,28 +295,39 @@
             background: linear-gradient(
                 180deg,
                 rgba(0, 0, 0, 0.55) 0%,
-                rgba(0, 0, 0, 0.20) 42%,
-                rgba(0, 0, 0, 0.55) 100%
+                rgba(0, 0, 0, 0.25) 45%,
+                rgba(0, 0, 0, 0.6) 100%
             );
         }
 
-        .hero .container {
+        .hero .hero-content {
             position: relative;
             z-index: 2;
-            padding: 130px 20px 30px;  /* Reduced padding to move text up */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            width: 100%;
+            max-width: 860px;
+            padding: 140px 20px 60px;
+            margin: 0 auto;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.15;
+            margin: 0;
             color: #FFFFFF;
             text-shadow: 0 2px 20px rgba(0, 0, 0, 0.55);
+            max-width: 18ch;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
+            font-size: clamp(1rem, 1.4vw, 1.2rem);
+            line-height: 1.6;
+            margin: 0;
+            max-width: 640px;
             color: #FFFFFF;
             text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
         }
@@ -336,6 +337,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 12px;
+            margin-top: 0.5rem;
         }
 
         .hero .btn-outline {
@@ -348,15 +350,131 @@
             color: var(--primary-green) !important;
         }
 
-        @media (max-width: 768px) {
-            .hero {
-                padding-bottom: 15vh; /* Shifts text further up on smaller screens */
+        /* ============================================
+           RESPONSIVE HEADER & HERO OVERRIDES
+           ============================================ */
+        
+        /* Tablet & Mobile: Hide top bar, shrink logo, reduce hero padding */
+        @media (max-width: 900px) {
+            /* Hide Top Bar completely to save space */
+            .top-bar {
+                display: none !important;
             }
-            .hero .container { 
-                padding: 100px 20px 20px; /* Reduced top clearance since top bar is hidden */
+
+            /* Shrink Logo */
+            .logo img { height: 70px; }
+
+            /* Reduce Hero padding to account for smaller header */
+            .hero .hero-content {
+                padding: 100px 20px 40px;
+                gap: 1rem;
             }
-            .hero h1 { font-size: 2.2rem; }
-            .hero p { font-size: 1.05rem; }
+
+            /* Adjust Header stack height */
+            section[id] { scroll-margin-top: 100px; }
+
+            /* Nav Mobile styles */
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 15px;
+                padding: 10px 0; /* Add padding to header */
+            }
+
+            .nav-toggle { display: flex; }
+
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: #FFFFFF;
+                border-top: 1px solid #EDEDED;
+                box-shadow: 0 14px 26px rgba(0, 0, 0, 0.10);
+                max-height: 0;
+                overflow: hidden;
+                visibility: hidden;
+                transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                            visibility 0.4s;
+            }
+
+            nav.is-open {
+                max-height: 540px;
+                overflow-y: auto;
+                visibility: visible;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 8px 20px 20px;
+            }
+
+            nav ul li { width: 100%; }
+
+            nav ul li a {
+                display: block;
+                padding: 14px 4px;
+                border-bottom: 1px solid #F1F1F1;
+            }
+
+            nav ul li:last-child a { border-bottom: none; }
+
+            nav ul li a.nav-link::after { display: none; }
+
+            nav ul li a.btn {
+                margin-top: 14px;
+                padding: 12px 20px !important;
+                text-align: center;
+            }
+
+            .site-header:not(.is-scrolled) nav.is-open ul li a.nav-link {
+                color: var(--text-dark);
+            }
+
+            html:not(.js-enabled) nav {
+                position: static;
+                max-height: none;
+                visibility: visible;
+                box-shadow: none;
+                border-top: none;
+            }
+            html:not(.js-enabled) .nav-toggle { display: none; }
+        }
+
+        /* Small Mobile (e.g. 375px width) */
+        @media (max-width: 480px) {
+            .logo img { height: 55px; }
+            
+            .hero .hero-content {
+                padding: 5px 16px 32px;
+                gap: 0.85rem;
+            }
+            
+            .hero h1 { font-size: 1.75rem; }
+            .hero p { font-size: 0.95rem; }
+            
+            .hero-btn-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .hero-btn-group .btn { width: 100%; }
+        }
+
+        /* Very short landscape screens */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero { min-height: 100vh; }
+            .hero .hero-content {
+                padding: 60px 20px 20px; /* Very small top padding */
+                gap: 0.5rem;
+            }
+            .hero h1 { font-size: 1.5rem; }
+            .hero p  { font-size: 0.85rem; }
+            .top-bar { display: none !important; }
+            .logo img { height: 45px; }
         }
 
         /* ABOUT */
@@ -474,7 +592,6 @@
             flex-direction: column;
         }
 
-        /* NEW: ensure anchor cards look like cards */
         a.product-card {
             color: inherit;
             text-decoration: none;
@@ -853,96 +970,8 @@
             font-size: 0.9rem;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-
-            .header-content {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                gap: 15px;
-            }
-
-            .logo img { height: 72px; }
-
-            .nav-toggle { display: flex; }
-
-            nav {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background-color: #FFFFFF;
-                border-top: 1px solid #EDEDED;
-                box-shadow: 0 14px 26px rgba(0, 0, 0, 0.10);
-                max-height: 0;
-                overflow: hidden;
-                visibility: hidden;
-                transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-                            visibility 0.4s;
-            }
-
-            nav.is-open {
-                max-height: 540px;
-                overflow-y: auto;
-                visibility: visible;
-            }
-
-            nav ul {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0;
-                padding: 8px 20px 20px;
-            }
-
-            nav ul li { width: 100%; }
-
-            nav ul li a {
-                display: block;
-                padding: 14px 4px;
-                border-bottom: 1px solid #F1F1F1;
-            }
-
-            nav ul li:last-child a { border-bottom: none; }
-
-            nav ul li a.nav-link::after { display: none; }
-
-            nav ul li a.btn {
-                margin-top: 14px;
-                padding: 12px 20px !important;
-                text-align: center;
-            }
-
-            /* the mobile dropdown panel is white — keep its links dark */
-            .site-header:not(.is-scrolled) nav.is-open ul li a.nav-link {
-                color: var(--text-dark);
-            }
-
-            html:not(.js-enabled) nav {
-                position: static;
-                max-height: none;
-                visibility: visible;
-                box-shadow: none;
-                border-top: none;
-            }
-            html:not(.js-enabled) .nav-toggle { display: none; }
-        }
-
-        @media (max-width: 768px) {
-            .top-bar {
-                display: none;
-            }
-
-            .about-layout { flex-direction: column; }
-
-            .view-more-wrap .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-
+        /* RESPONSIVE EXTRA */
         @media (max-width: 420px) {
-            .logo img { height: 60px; }
             .nav-toggle { width: 42px; height: 42px; }
         }
 
@@ -981,7 +1010,7 @@
         .ai-btn { background-color: var(--primary-brown); }
         .music-btn { background-color: var(--primary-green); }
 
-        /* --- AI CHAT BOX UI (Upgraded Lead Flow) --- */
+        /* --- AI CHAT BOX UI --- */
         .ai-chat-box {
             position: fixed;
             right: 85px;
@@ -1245,12 +1274,11 @@
 <body>
 
     <!-- ============================================
-         FIXED HEADER STACK (top bar + header)
-         Sits ON TOP of the full-screen hero video
+         FIXED HEADER STACK
          ============================================ -->
     <div class="site-header" id="siteHeader">
 
-        <!-- TOP BAR -->
+        <!-- TOP BAR (hidden on mobile) -->
         <div class="top-bar">
             <div class="container top-bar-content">
                 <div class="top-bar-info">
@@ -1297,7 +1325,7 @@
     </div>
     <!-- /site-header -->
 
-    <!-- HERO — full-screen background video (no white overlay) -->
+    <!-- HERO -->
     <section class="hero" id="home">
         <video class="hero-video"
                autoplay
@@ -1311,15 +1339,19 @@
             <source src="Music/neeombags.mp4" type="video/mp4">
         </video>
 
-        <div class="container">
+        <div class="container hero-content">
             <h1 class="reveal reveal-up">Sustainable Bags. Exceptional Brands</h1>
-            <p class="reveal reveal-up" style="transition-delay: 0.15s;">Premium Eco-Friendly Bags That Carry Your Brand Forward. We Supply High-Quality, Reusable Non-Woven Bags For Retail, Hospitality and Corporate Businesses. Customizable with Your Brand Logo</p>
+            <p class="reveal reveal-up" style="transition-delay: 0.15s;">
+                Premium Eco-Friendly Bags That Carry Your Brand Forward. We supply high-quality,
+                reusable non-woven bags for retail, hospitality and corporate businesses —
+                customizable with your brand logo.
+            </p>
 
             <div class="reveal reveal-up hero-btn-group" style="transition-delay: 0.3s;">
                 <a href="products.html" class="btn">View Our Products</a>
                 <a href="#contact" class="btn btn-outline">Request a Quote</a>
             </div>
-        </div>   ytyyyoioi
+        </div>
     </section>
 
     <!-- ABOUT -->
@@ -1344,7 +1376,6 @@
             <h2 class="section-title reveal reveal-up">Our Product Range</h2>
             <div class="product-grid">
 
-                <!-- UPDATED: Now a link to products.html?cat=non-woven -->
                 <a class="product-card reveal reveal-up" href="products.html?cat=non-woven">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage1.jpg" alt="Premium Garment Bags">
@@ -1354,7 +1385,6 @@
                     </div>
                 </a>
 
-                <!-- UPDATED: Now a link to products.html?cat=cloth-tote -->
                 <a class="product-card reveal reveal-up" href="products.html?cat=cloth-tote" style="transition-delay: 0.1s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage2.jpg" alt="Hotel Laundry Bags">
@@ -1364,7 +1394,6 @@
                     </div>
                 </a>
 
-                <!-- UPDATED: Now a link to products.html?cat=cotton-canvas -->
                 <a class="product-card reveal reveal-up" href="products.html?cat=cotton-canvas" style="transition-delay: 0.2s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage3.jpg" alt="Drawstring Utility Bags">
@@ -1374,7 +1403,6 @@
                     </div>
                 </a>
 
-                <!-- UPDATED: Now a link to products.html?cat=string-bags -->
                 <a class="product-card reveal reveal-up" href="products.html?cat=string-bags" style="transition-delay: 0.3s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage4.jpg" alt="Blanket &amp; Comforter Storage Bags">
@@ -1384,7 +1412,6 @@
                     </div>
                 </a>
 
-                <!-- UPDATED: Now a link to products.html?cat=Garment-bags (note capital G) -->
                 <a class="product-card reveal reveal-up" href="products.html?cat=Garment-bags" style="transition-delay: 0.4s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage5.jpg" alt="Custom Color Garment Bags">
@@ -1394,7 +1421,6 @@
                     </div>
                 </a>
 
-                <!-- UPDATED: Now a link to products.html?cat=jute-juco -->
                 <a class="product-card reveal reveal-up" href="products.html?cat=jute-juco" style="transition-delay: 0.5s;">
                     <div class="product-image">
                         <img src="Images/ProductRangeimg/Productimage6.jpg" alt="Travel Garment Bags">
@@ -1482,7 +1508,7 @@
 
                     <div class="map-container">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3607.2195320910823!2d55.39338687538569!3d25.29682727764689!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjXCsDE3JzQ4LjYiTiA1NcKwMjMnNDUuNSJF!5e0!3m2!1sen!2sin!4v1793945442935!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3607.2195320910823!2d55.39338687538569!3d25.29682727764689!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjXCsDE3JzQ4LjYiTiA1NcKwMjMnNDUuNSJF!5e0!3m2!1sen!2sin!4v1793945442935!5m2!1sen!2sin" width="600" height="450" style="border:0;"
                             title="Neom Hotel Supplies location on Google Maps"
                             allowfullscreen=""
                             loading="lazy"
@@ -1597,7 +1623,7 @@
         <source src="Music/Pufino.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- AI Chat Box UI (Lead Flow) -->
+    <!-- AI Chat Box UI -->
     <div id="aiChatBox" class="ai-chat-box">
         <div class="ai-chat-header">
             <div class="ai-chat-header-info">
@@ -1853,8 +1879,8 @@
             const musicIconPlay  = document.getElementById('musicIconPlay');
             const musicIconPause = document.getElementById('musicIconPause');
 
-            let userWantsMusic = true;   // user's intent (true = music should be playing)
-            let audioUnlocked  = false;  // flipped to true after one successful play()
+            let userWantsMusic = true;
+            let audioUnlocked  = false;
 
             function updateMusicIcon(playing) {
                 if (!musicIconPlay || !musicIconPause) return;
@@ -1895,9 +1921,6 @@
                 });
             }
 
-            /* Browser autoplay policy: audio with sound needs one user gesture.
-               We listen for the very FIRST gesture (tap, click, key, or scroll) and
-               start the music immediately, so in practice it begins with the video. */
             const GESTURE_EVENTS = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
 
             function unlockAudioOnGesture() {
@@ -1915,7 +1938,6 @@
                 document.addEventListener(evt, unlockAudioOnGesture, { passive: true });
             });
 
-            // Retry when the tab becomes visible again
             document.addEventListener('visibilitychange', function () {
                 if (!document.hidden && userWantsMusic) playBgMusic();
             });
@@ -1926,17 +1948,14 @@
             const heroVideo = document.querySelector('.hero-video');
 
             if (heroVideo) {
-                // Start music whenever the hero video starts playing
                 heroVideo.addEventListener('play', playBgMusic);
 
-                // Respect "reduce motion": pause the video (poster stays)
                 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
                 if (reduceMotion.matches) {
                     heroVideo.removeAttribute('autoplay');
                     heroVideo.pause();
                 }
 
-                // Some browsers block muted autoplay (iOS Low Power Mode, etc.)
                 const tryPlay = function () {
                     const p = heroVideo.play();
                     if (p && typeof p.catch === 'function') {
@@ -1946,8 +1965,6 @@
 
                 heroVideo.addEventListener('canplay', tryPlay, { once: true });
 
-                // If the video errors out entirely, hide it so the CSS background-image
-                // fallback on .hero shows through.
                 heroVideo.addEventListener('error', function () {
                     heroVideo.style.display = 'none';
                 }, true);
